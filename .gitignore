@@ -1,0 +1,39 @@
+HELP.md
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+backend/src/main/resources/cookies.txt
+frontend/cert/key.pem
+
+### STS ###
+*.class
+*.classpath
+*.factorypath
+*.project
+*.settings/
+.apt_generated
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+**/nbproject/private/
+**/nbbuild/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
+**/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Executáveis auxiliares ###
+frontend/cert/caddy.exe

@@ -1,0 +1,24 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+}
+
+.logo-img {
+    max-height: 350px;
+    max-width: 350px;
+}
+
+.card {
+    width: 100%;
+    max-width: 400px;
+}

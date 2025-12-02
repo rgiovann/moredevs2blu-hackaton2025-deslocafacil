@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro Parecer Engenharia</title>
+  <link rel="stylesheet" href="assets/css/normalize.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <!-- Seguindo padrão do fornecedor -->
+  <link rel="stylesheet" href="assets/css/tela_cadastro_recebimento.css" />
+  <link rel="stylesheet" href="assets/css/dropdown_generico.css" />
+</head>
+
+<body>
+  <div class="container mt-4 mb-5">
+
+    <!-- Seção: Cadastro Parecer Engenharia -->
+    <section class="card mb-4">
+      <h4 class="mb-2 mt-2 text-center titulo-cad-recebimento">CADASTRO PARECER DE ENGENHARIA</h4>
+      <div class="card-header">Dados do Parecer</div>
+      <div class="card-body">
+        <form id="formParecer" name="formParecer" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nomeEngenheiro" class="form-label">Nome Engenheiro</label>
+              <input type="text" id="nomeEngenheiro" name="nomeEngenheiro" class="form-control" required
+                autocomplete="off" />
+              <div class="invalid-feedback">Por favor, preencha o campo Nome Engenheiro.</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tipo Teste Realizado</label>
+              <div class="d-flex flex-wrap">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="amostraFisica" name="tipoTeste"
+                    value="Amostra Física" />
+                  <label class="form-check-label" for="amostraFisica">Amostra Física</label>
+                </div>
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="amostraAcabamento" name="tipoTeste"
+                    value="Amostra Acabamento" />
+                  <label class="form-check-label" for="amostraAcabamento">Amostra Acabamento</label>
+                </div>
+              </div>
+              <div class="invalid-feedback">Selecione pelo menos um tipo de teste.</div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+              <label class="form-label">Restrição Uso</label>
+              <div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="restricaoParcial" name="restricao" value="parcial"
+                    required />
+                  <label class="form-check-label" for="restricaoParcial">Restrição Parcial</label>
+                </div>
+                <textarea class="form-control mt-2" id="restricaoAdicional" maxlength="500"
+                  placeholder="Descreva a restrição parcial (máx. 500 caracteres)" style="display:none;"></textarea>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="radio" id="restricaoTotal" name="restricao" value="total" />
+                  <label class="form-check-label" for="restricaoTotal">Restrição Total</label>
+                </div>
+                <div class="invalid-feedback">Selecione uma restrição.</div>
+              </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+              <label for="observacao" class="form-label">Observação</label>
+              <textarea class="form-control" id="observacao" name="observacao" maxlength="1000" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Botões centralizados -->
+          <div class="text-center mt-4">
+            <button id="btnCadastrar" type="submit" class="btn btn-success btn-custom">
+              <i class="fas fa-save me-2"></i>Cadastrar
+            </button>
+            <button id="btnImprimir" type="button" class="btn btn-primary btn-custom">
+              <i class="fas fa-print me-2"></i>Imprimir
+            </button>
+            <button id="btnSair" type="button" class="btn btn-danger btn-custom">
+              <i class="fas fa-sign-out-alt me-2"></i>Sair
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal de Alerta Global -->
+  <div class="modal fade" id="modalMensagemSistema" tabindex="-1" aria-labelledby="modalMensagemSistemaTitulo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title" id="modalMensagemSistemaTitulo">Aviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body"><!-- Conteúdo via JS --></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação Genérico -->
+  <div class="modal fade" id="modalConfirmacaoGenerico" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalConfirmacaoTitulo">Confirmação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body" id="modalConfirmacaoMensagem"></div>
+        <div class="modal-footer">
+          <button id="btnConfirmacaoSim" type="button" class="btn btn-primary">Sim</button>
+          <button id="btnConfirmacaoNao" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../webapp/assets/js/fiberguardian_core.js"></script>
+  <script src="../webapp/assets/js/tela_cadastro_parecer_engenharia.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,25 @@
+{
+  "nota": {
+    "codigoNf": "NF1236",
+    "cnpj": "77725062000195",
+    "recebidoPor": "ana.souza@fiberguardian.com",
+    "dataRecebimento": "2025-08-18",
+    "valorTotal": 8900.00
+  },
+  "itens": [
+    {
+      "codigoProduto": "CFP21008761",
+      "qtdRecebida": 10.6,
+      "nrCaixas": 1,
+      "precoUnitario": 12.0,
+      "observacao": "Sem avarias"
+    },
+    {
+      "codigoProduto": "CFP33004520",
+      "qtdRecebida": 5.45,
+      "nrCaixas": 10,
+      "precoUnitario": 100.00,
+      "observacao": "Produto frágil"
+    }
+  ]
+}

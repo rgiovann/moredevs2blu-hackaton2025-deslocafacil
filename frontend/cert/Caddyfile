@@ -1,0 +1,17 @@
+localhost:443 {
+    tls cert.pem key.pem
+
+    # API do backend Spring Boot (porta 8443)
+    reverse_proxy /api/* https://localhost:8443 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+
+    # Arquivos estáticos do frontend (HTML, JS, CSS na porta 8080)
+    reverse_proxy /* https://localhost:8080 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+}

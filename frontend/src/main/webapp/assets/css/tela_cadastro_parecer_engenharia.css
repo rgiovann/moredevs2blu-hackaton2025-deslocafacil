@@ -1,0 +1,33 @@
+ .form-container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .btn-custom {
+      margin: 5px;
+    }
+
+    .alert {
+      margin-top: 10px;
+    }
+
+    .custom-checkbox,
+    .custom-radio {
+      margin-bottom: 10px;
+    }
+
+    .restricao-adicional {
+      display: none;
+      margin-top: 8px;
+    }
+
+    

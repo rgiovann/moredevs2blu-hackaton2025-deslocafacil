@@ -1,0 +1,82 @@
+.form-container {
+    background: #e3f2fd;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.titulo-cad-recebimento {
+    font-size: 1.5rem;
+}
+
+.form-section-title {
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.form-section-title,
+.card-header {
+    background-color: #078dfb;
+}
+
+.branco-bold {
+    color: white;
+    font-weight: bold;
+}
+
+.card {
+    background: #e3f2fd;
+}
+
+.btn-custom {
+    min-width: 120px;
+    margin: 5px;
+}
+
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Tom mais escuro para os botões Buscar */
+.btn-outline-secondary {
+    color: #444;
+    border-color: #444;
+    background-color: #c5defd;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    background-color: #8b8e91;
+    border-color: #444;
+    color: #fff;
+}
+
+/* Força cor diferenciada nos inputs/textareas */
+.form-control.campo-desabilitado {
+    background-color: #dee2e6 !important; /* tom mais escuro que o readonly normal */
+    color: #6c757d; /* texto um pouco apagado */
+}
+
+/* Para botões bloqueados manualmente */
+button.campo-desabilitado {
+    opacity: 0.65 !important;
+}
+
+/* Para toda a section “travada” dar um efeito esmaecido */
+section.card.campo-desabilitado {
+    opacity: 0.85;
+}
+
+.dropdown-menu-auto {
+    min-width: 0 !important; /* remove min-width padrão */
+    width: auto !important; /* largura do conteúdo */
+    white-space: nowrap; /* sem quebra de linha */
+    position: absolute; /* garante que saia da célula */
+    background-color: rgb(203, 216, 228);
+}
+
+td {
+    width: auto;
+}

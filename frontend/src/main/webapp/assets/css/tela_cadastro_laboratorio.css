@@ -1,0 +1,90 @@
+.titulo-cad-lab {
+    font-size: 1.5rem;
+}
+
+/* Estilo do card */
+.card-custom {
+    background-color: #eaf4fb;
+    border-radius: 8px;
+    padding: 15px; /* reduzido (antes 20px) */
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px; /* reduzido (antes 20px) */
+    width: 100%;
+}
+
+/* Cabeçalho do card */
+.card-header {
+    background-color: #078dfb;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    //padding: 8px; /* reduzido (antes 10px) */
+    //border-radius: 6px 6px 0 0;
+}
+
+/* Rótulos */
+//.form-label {
+//    font-weight: 500;
+//}
+
+/* Botões */
+.btn-custom {
+    min-width: 100px;
+    margin: 5px;
+}
+
+.container {
+    max-width: 98%;
+    width: auto;
+    margin-top: 0.5rem; /* antes maior, agora compacto */
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-md-4,
+.col-md-6 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+/* Ajuste no espaçamento do título */
+.header-spacing {
+    margin-top: 0.5rem !important; /* antes 2rem */
+    margin-bottom: 1rem !important; /* antes 2rem */
+}
+
+/* Força cor diferenciada nos inputs/textareas */
+.form-control.campo-desabilitado {
+    background-color: #dee2e6 !important; /* tom mais escuro que o readonly normal */
+    color: #6c757d; /* texto um pouco apagado */
+}
+
+/* Para botões bloqueados manualmente */
+button.campo-desabilitado {
+    opacity: 0.65 !important;
+}
+
+/* Para toda a section “travada” dar um efeito esmaecido */
+section.card.campo-desabilitado {
+    opacity: 0.85;
+}
