@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro de Nota Fiscal por Item</title>
+  <link rel="stylesheet" href="assets/css/normalize.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Bundle (com Modal e Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/tela_cadastro_deslocamento.css" />
+  <link rel="stylesheet" href="assets/css/dropdown_generico.css" />
+
+</head>
+
+<body>
+  <div class="container mt-4 mb-5">
+
+    <!-- Formulário de Cadastro de Deslocamento -->
+    <section class="card mb-4">
+      <h4 class="mb-2 mt-2 text-center titulo-cad-recebimento">CADASTRO DE DESLOCAMENTOS</h4>
+      <div class="card-header branco-bold">Dados do Deslocamento</div>
+      <div class="card-body">
+        <form id="formDeslocamento" name="formDeslocamento" novalidate>
+
+          <!-- Linha 1: Colaborador -->
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="colaborador" class="form-label">
+                <i class="fas fa-user me-2"></i>Colaborador
+              </label>
+              <div class="input-group">
+                <input type="text" id="colaborador" name="colaborador" class="form-control" autocomplete="off"
+                  placeholder="Digite parte do nome, clique botão Buscar." required />
+                <button id="btnBuscarColaborador" class="btn btn-outline-secondary" name="btnBuscarColaborador"
+                  type="button">
+                  <i class="fas fa-search me-2"></i>Buscar
+                </button>
+                <button id="btnTrocarColaborador" class="btn btn-outline-danger" name="btnTrocarColaborador"
+                  type="button" disabled>
+                  <i class="fas fa-exchange-alt me-2"></i>Trocar
+                </button>
+              </div>
+              <!-- Dropdown de resultados para Colaborador -->
+              <div id="dropdownColaborador" name="dropdownColaborador" class="dropdown-menu w-100"
+                aria-labelledby="colaborador"></div>
+            </div>
+          </div>
+
+          <!-- Linha 2: Origem -->
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="origemCidade" class="form-label">
+                <i class="fas fa-map-marker-alt me-2"></i>Origem - Cidade
+              </label>
+              <input type="text" id="origemCidade" name="origemCidade" class="form-control" maxlength="100" required />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="origemEstado" class="form-label">
+                <i class="fas fa-map me-2"></i>Origem - Estado
+              </label>
+              <select class="form-select" name="origemEstado" id="origemEstado" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="origemEndereco" class="form-label">
+                <i class="fas fa-location-dot me-2"></i>Origem - Endereço
+              </label>
+              <input type="text" id="origemEndereco" name="origemEndereco" class="form-control" maxlength="255" />
+            </div>
+          </div>
+
+          <!-- Linha 3: Destino -->
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="destinoCidade" class="form-label">
+                <i class="fas fa-flag-checkered me-2"></i>Destino - Cidade
+              </label>
+              <input type="text" id="destinoCidade" name="destinoCidade" class="form-control" maxlength="100"
+                required />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="destinoEstado" class="form-label">
+                <i class="fas fa-map me-2"></i>Destino - Estado
+              </label>
+              <select class="form-select" name="destinoEstado" id="destinoEstado" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="destinoEndereco" class="form-label">
+                <i class="fas fa-location-dot me-2"></i>Destino - Endereço
+              </label>
+              <input type="text" id="destinoEndereco" name="destinoEndereco" class="form-control" maxlength="255" />
+            </div>
+          </div>
+
+          <!-- Linha 4: Motivo -->
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="motivo" class="form-label">
+                <i class="fas fa-comment-dots me-2"></i>Motivo do Deslocamento
+              </label>
+              <input type="text" id="motivo" name="motivo" class="form-control" maxlength="255" required />
+            </div>
+          </div>
+
+          <!-- Linha 5: Datas -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="dataSaida" class="form-label">
+                <i class="fas fa-calendar-day me-2"></i>Data e Hora de Saída
+              </label>
+              <input type="datetime-local" id="dataSaida" name="dataSaida" class="form-control" required />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="dataChegadaPrevista" class="form-label">
+                <i class="fas fa-calendar-check me-2"></i>Data e Hora de Chegada Prevista
+              </label>
+              <input type="datetime-local" id="dataChegadaPrevista" name="dataChegadaPrevista" class="form-control"
+                required />
+            </div>
+          </div>
+
+          <!-- Linha 6: Meio de Transporte e Custos -->
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="meioTransporte" class="form-label">
+                <i class="fas fa-bus me-2"></i>Meio de Transporte
+              </label>
+              <select class="form-select" name="meioTransporte" id="meioTransporte" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="AVIAO">Avião</option>
+                <option value="ONIBUS">Ônibus</option>
+                <option value="CARRO">Carro</option>
+                <option value="UBER_99">Uber/99</option>
+                <option value="TAXI">Táxi</option>
+                <option value="BARCO">Barco</option>
+                <option value="OUTROS">Outros</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="custoEstimado" class="form-label">
+                <i class="fas fa-dollar-sign me-2"></i>Custo Estimado
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="text" id="custoEstimado" name="custoEstimado" class="form-control campo-monetario"
+                  placeholder="0,00" maxlength="15">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="custoReal" class="form-label">
+                <i class="fas fa-receipt me-2"></i>Custo Real (opcional)
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="text" id="custoReal" name="custoReal" class="form-control campo-monetario"
+                  placeholder="0,00" maxlength="15">
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha 7: Observações -->
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="observacoes" class="form-label">
+                <i class="fas fa-sticky-note me-2"></i>Observações
+              </label>
+              <textarea id="observacoes" name="observacoes" class="form-control" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="text-center mt-4">
+            <button id="btnSalvarDeslocamento" name="btnSalvarDeslocamento" type="button"
+              class="btn btn-success btn-custom">
+              <i class="fas fa-save me-2"></i>Salvar Deslocamento
+            </button>
+            <button id="btnLimparFormulario" name="btnLimparFormulario" type="button"
+              class="btn btn-warning btn-custom">
+              <i class="fas fa-eraser me-2"></i>Limpar
+            </button>
+            <button id="btnSair" name="btnSair" type="button" class="btn btn-danger btn-custom">
+              <i class="fas fa-sign-out-alt me-2"></i>Sair
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Modal de Alerta Global -->
+  <div class="modal fade" id="modalMensagemSistema" name="modalMensagemSistema" tabindex="-1"
+    aria-labelledby="modalMensagemSistemaTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title" id="modalMensagemSistemaTitulo" name="modalMensagemSistemaTitulo">Aviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-pre-wrap">
+          <!-- Conteúdo da mensagem será inserido via JS -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação Genérico -->
+  <div class="modal fade" id="modalConfirmacaoGenerico" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalConfirmacaoTitulo">Confirmação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+
+        <div class="modal-body" id="modalConfirmacaoMensagem">
+          <!-- Mensagem será preenchida dinamicamente -->
+        </div>
+
+        <div class="modal-footer">
+          <button id="btnConfirmacaoSim" type="button" class="btn btn-primary">Sim</button>
+          <button id="btnConfirmacaoNao" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
