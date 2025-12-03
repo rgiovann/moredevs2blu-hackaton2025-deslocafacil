@@ -210,6 +210,14 @@
             return div.innerHTML;
         }
 
+        function converterInputDatetimeParaUtcIso(inputValue) {
+            // inputValue ex.: "2025-12-03T10:13"
+            if (!inputValue) return null;
+            // Garante segundos antes de criar Date
+            const localDate = new Date(inputValue + ':00');
+            return localDate.toISOString(); // ex.: "2025-12-03T13:13:00.000Z"
+        }
+
         function exibirMensagemModalComFoco(mensagem, tipo, campoAlvo) {
             if (!mensagem || !campoAlvo) return;
 
@@ -532,13 +540,12 @@
             if (container) {
                 // Restaura classes de centralização para tela inicial
                 container.className =
-                    'content d-flex justify-content-center align-items-center text-center';
+                    ' content d-flex justify-content-center align-items-end text-center';
 
                 // Restaura conteúdo inicial
                 container.innerHTML = `
             <div>
-                <img src="assets/img/logo-fiberguardian.png" alt="Logotipo FiberGuardian" class="img-fluid mb-4" style="max-width: 400px;">
-                <p class="lead texto-container">Selecione uma opção no menu lateral para começar</p>
+                <p id="texto-logo-grande" class="lead texto-container">Selecione uma opção no menu lateral para começar</p>
             </div>`;
 
                 console.info('[FiberGuardian] Menu principal restaurado.');
@@ -649,6 +656,7 @@
             downloadArquivo,
             getInputValue,
             setCurrentDate,
+            converterInputDatetimeParaUtcIso,
         };
     })();
 })();
