@@ -215,6 +215,14 @@
                 return;
             }
 
+            if (inputDataSaida.value >= inputDataChegadaPrevista.value) {
+                exibirErroGenerico(
+                    'A Data/Hora de Saída deve ser anterior à Data/Hora de Chegada Prevista.',
+                    inputDataSaida
+                );
+                return;
+            }
+
             // 9) Meio Transporte
             if (!selectMeioTransporte || !selectMeioTransporte.value) {
                 exibirErroGenerico(

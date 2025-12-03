@@ -104,6 +104,9 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "/api/item-notas-fiscais/list/**").hasAnyAuthority(ROLE_LISTAGEM)
 						.requestMatchers(HttpMethod.GET, "/api/notas-fiscais/list/**").hasAnyAuthority(ROLE_LISTAGEM)
 						.requestMatchers(HttpMethod.GET, "/api/usuarios/lista-usuario-por-role").hasAnyAuthority(ROLE_LISTAGEM)
+						.requestMatchers(HttpMethod.PUT, "/api/deslocamentos").hasAuthority(Role.ADMIN.getAuthority())
+						.requestMatchers(HttpMethod.GET, "/api/deslocamentos").hasAuthority(Role.ADMIN.getAuthority())
+						.requestMatchers(HttpMethod.PATCH, "/api/deslocamentos").hasAuthority(Role.ADMIN.getAuthority())
 
 						.requestMatchers(HttpMethod.POST, "/api/usuarios/reset-senha").hasAuthority(Role.ADMIN.getAuthority())
 						.requestMatchers(HttpMethod.POST, "/api/usuarios").hasAuthority(Role.ADMIN.getAuthority())
