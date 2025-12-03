@@ -10,7 +10,7 @@
   <!-- Bootstrap Bundle (com Modal e Popper) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/tela_cadastro_recebimento.css" />
+  <link rel="stylesheet" href="assets/css/tela_cadastro_deslocamento.css" />
   <link rel="stylesheet" href="assets/css/tela_consulta_recebimento.css" />
 
   <link rel="stylesheet" href="assets/css/dropdown_generico.css" />
@@ -22,123 +22,109 @@
   <div class="container mt-4 mb-5">
 
     <section class="card mb-4">
-      <h4 class="mb-2 mt-2 text-center titulo-pesquisa">PESQUISA DE NOTAS FISCAIS</h4>
+      <h4 class="mb-2 mt-2 text-center titulo-pesquisa">PESQUISA DE DESLOCAMENTOS</h4>
       <div class="card-header branco-bold">
         <i class="fas fa-search me-2"></i>Filtros de Pesquisa
       </div>
       <div class="card-body">
         <form id="formPesquisa">
+
           <div class="row">
-            <!-- Primeira linha -->
+
+            <!-- Linha 1 -->
             <div class="col-md-4 mb-3">
-              <label for="dataInicial" class="form-label">Data Inicial</label>
+              <label for="dataInicial" class="form-label">Data de Saída Inicial</label>
               <input type="date" id="dataInicial" name="dataInicial" class="form-control" />
             </div>
 
             <div class="col-md-4 mb-3">
-              <label for="dataFinal" class="form-label">Data Final</label>
+              <label for="dataFinal" class="form-label">Data de Saída Final</label>
               <input type="date" id="dataFinal" name="dataFinal" class="form-control" />
             </div>
 
-
-            <!-- Segunda linha -->
-            <div class="col-md-4 mb-3">
-              <label for="fornecedor" class="form-label">Fornecedor</label>
-              <div class="input-group">
-                <input type="text" id="fornecedor" name="fornecedor" class="form-control"
-                  placeholder="Digite parte do nome, clique botão Buscar." autocomplete="off" />
-                <button id="btnBuscarFornecedor" class="btn btn-outline-secondary" name="btnBuscarFornecedor"
-                  type="button">
-                  <i class="fas fa-search me-2"></i>Buscar
-                </button>
-                <button id="btnTrocarFornecedor" class="btn btn-outline-danger" name="btnTrocarFornecedor" type="button"
-                  disabled>
-                  <i class="fas fa-exchange-alt me-2"></i>Trocar
-                </button>
-              </div>
-              <!-- Dropdown de resultados para Fornecedor -->
-              <div id="dropdownFornecedor" name="dropdownFornecedor" class="dropdown-menu w-100"
-                aria-labelledby="fornecedor"></div>
-            </div>
-
-            <div class="col-md-4 mb-3">
-              <label for="produto" class="form-label">Produto</label>
-              <div class="input-group">
-                <input type="text" id="produto" name="produto" class="form-control"
-                  placeholder="Digite parte do nome, clique botão Buscar." autocomplete="off" />
-                <button id="btnBuscarProduto" class="btn btn-outline-secondary" name="btnBuscarProduto" type="button">
-                  <i class="fas fa-search me-2"></i>Buscar
-                </button>
-                <button id="btnTrocarProduto" class="btn btn-outline-danger" name="btnTrocarProduto" type="button"
-                  disabled>
-                  <i class="fas fa-exchange-alt me-2"></i>Trocar
-                </button>
-              </div>
-              <!-- Dropdown de resultados para Produto -->
-              <div id="dropdownProduto" name="dropdownProduto" class="dropdown-menu w-100" aria-labelledby="produto">
-              </div>
-            </div>
-
-            <div class="col-md-4 mb-3">
-              <label for="nrNotaFiscal" class="form-label">Nº Nota Fiscal</label>
-              <div class="input-group">
-                <input type="text" id="nrNotaFiscal" name="nrNotaFiscal" class="form-control"
-                  placeholder="Digite o número da nota" autocomplete="off" />
-                <button id="btnBuscarNrNotaFiscal" class="btn btn-outline-secondary" name="btnBuscarNrNotaFiscal"
-                  type="button">
-                  <i class="fas fa-search me-2"></i>Buscar
-                </button>
-                <!--
-                <button id="btnTrocarNrNotaFiscal" class="btn btn-outline-danger" name="btnTrocarNrNotaFiscal" type="button"
-                  disabled>
-                  Trocar
-                </button>
-                -->
-              </div>
-              <!-- Dropdown de resultados para Nota Fiscal -->
-              <div id="dropdownNrNotaFiscal" name="dropdownNrNotaFiscal" class="dropdown-menu w-100"
-                aria-labelledby="nrNotaFiscal"></div>
-            </div>
-
-            <!-- Terceira coluna da segunda linha vazia para manter padrão 4-4-4 -->
-            <div class="col-md-4 mb-3">
-              <!-- Espaço reservado para futuras expansões ou deixar vazio por layout -->
-            </div>
-
-            <!-- Botões centralizados -->
-            <div class="text-center mt-4">
-              <button type="button" id="btnPesquisarNf" name="btnPesquisarNf" class="btn btn-primary btn-custom">
-                <i class="fas fa-search me-2"></i>Pesquisar Notas
-              </button>
-              <button type="button" id="btnLimpar" name="btnLimpar" class="btn btn-secondary btn-custom">
-                <i class="fas fa-eraser me-2"></i>Limpar Pesquisa
-              </button>
-              <button type="button" class="btn btn-danger btn-custom" id="btnSair" name="btnSair">
-                <i class="fas fa-sign-out-alt me-2"></i>Sair
-              </button>
-            </div>
           </div>
-        </form>
-        <!-- Tabela Dinâmica -->
-        <div class="mt-4 table-container">
-          <table class="table table-bordered table-striped align-middle text-center">
-            <thead class="table-dark">
-              <tr>
-                <th>Nr. Nota Fiscal</th>
-                <th>Fornecedor</th>
-                <th>CNPJ</th>
-                <th>Recebido por</th>
-                <th>Data Recebimento</th>
-                <th>Valor Total NF</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div id="paginacao-container" class="d-flex justify-content-center mt-3"></div>
+
+
+          <!-- Linha 2 -->
+          <div class="row">
+
+            <!-- Colaborador (campo mais largo) -->
+            <div class="col-md-6 mb-3">
+              <label for="colaborador" class="form-label">
+                <i class="fas fa-user me-2"></i>Colaborador
+              </label>
+              <div class="input-group">
+                <input type="text" id="colaborador" name="colaborador" class="form-control" autocomplete="off"
+                  placeholder="Digite parte do nome, clique em Buscar." />
+                <button id="btnBuscarColaborador" class="btn btn-outline-secondary" type="button">
+                  <i class="fas fa-search me-2"></i>Buscar
+                </button>
+                <button id="btnTrocarColaborador" class="btn btn-outline-danger" type="button" disabled>
+                  <i class="fas fa-exchange-alt me-2"></i>Trocar
+                </button>
+              </div>
+
+              <div id="dropdownColaborador" class="dropdown-menu w-100"></div>
+            </div>
+
+            <!-- Status -->
+            <div class="col-md-3 mb-3">
+              <label for="status" class="form-label">
+                <i class="fas fa-traffic-light me-2"></i>Status
+              </label>
+              <select id="status" name="status" class="form-select">
+                <option value="" selected>Todos</option>
+                <option value="PLANEJADO">Planejado</option>
+                <option value="EM_TRANSITO">Em Trânsito</option>
+                <option value="ATRASADO">Atrasado</option>
+                <option value="CONCLUIDO">Concluído</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+
+            <!-- Espaço para layout futuro -->
+            <div class="col-md-3 mb-3">
+            </div>
+
+          </div>
+
+          <!-- Botões centralizados -->
+          <div class="text-center mt-4">
+            <button type="button" id="btnPesquisarDeslocamento" name="btnPesquisarDeslocamento"
+              class="btn btn-primary btn-custom">
+              <i class="fas fa-search me-2"></i>Pesquisar Deslocamentos
+            </button>
+            <button type="button" id="btnLimpar" name="btnLimpar" class="btn btn-secondary btn-custom">
+              <i class="fas fa-eraser me-2"></i>Limpar Pesquisa
+            </button>
+            <button type="button" class="btn btn-danger btn-custom" id="btnSair" name="btnSair">
+              <i class="fas fa-sign-out-alt me-2"></i>Sair
+            </button>
+          </div>
       </div>
-    </section>
+      </form>
+      <!-- Tabela Dinâmica -->
+      <div class="mt-4 table-container">
+        <table class="table table-bordered table-striped align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>Colaborador</th>
+              <th>Origem → Destino</th>
+              <th>Status</th>
+              <th>Data de Saída</th>
+              <th>Chegada Prevista</th>
+              <th>Chegada Realizada</th>
+              <th>Custo Estimado</th>
+              <th>Custo Real</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="paginacao-container" class="d-flex justify-content-center mt-3"></div>
+  </div>
+  </section>
   </div>
   </div>
   </div>

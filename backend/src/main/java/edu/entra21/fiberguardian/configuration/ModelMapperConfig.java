@@ -36,12 +36,15 @@ public class ModelMapperConfig {
                 });
 
 
-        // Mapeamento de NotaFiscal -> NotaFiscalListagemPagedDto
+        // Mapeamento de Deslocamento -> DeslocamentoPagedDto
+        // flat para email e nome de usuario
         modelMapper.addMappings(new PropertyMap<Deslocamento, DeslocamentoPagedDto>() {
             @Override
             protected void configure() {
                 // Usuario
                 map().setEmailUsuario(source.getUsuario().getEmail());
+                map().setNomeUsuario(source.getUsuario().getNome());
+
             }
         });
 

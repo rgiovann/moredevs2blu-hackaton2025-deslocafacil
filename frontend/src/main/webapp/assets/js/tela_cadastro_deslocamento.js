@@ -255,8 +255,11 @@
                         inputCustoEstimado?.value
                     ) ?? null,
                 custoReal:
-                    FiberGuardian.Utils.parseCurrencyToNumber(inputCustoReal?.value) ??
-                    null,
+                    inputCustoReal?.value.trim() === ''
+                        ? null
+                        : FiberGuardian.Utils.parseCurrencyToNumber(
+                              inputCustoReal.value
+                          ),
                 observacoes: inputObservacoes?.value?.trim() || null,
             };
 
