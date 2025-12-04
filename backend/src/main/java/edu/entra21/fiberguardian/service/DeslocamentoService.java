@@ -2,10 +2,7 @@ package edu.entra21.fiberguardian.service;
 
 import edu.entra21.fiberguardian.exception.exception.DeslocamentoNaoEncontradoException;
 import edu.entra21.fiberguardian.exception.exception.NegocioException;
-import edu.entra21.fiberguardian.model.CategoriaCheckpoint;
-import edu.entra21.fiberguardian.model.CheckPoint;
-import edu.entra21.fiberguardian.model.Deslocamento;
-import edu.entra21.fiberguardian.model.Usuario;
+import edu.entra21.fiberguardian.model.*;
 import edu.entra21.fiberguardian.repository.DeslocamentoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,7 +152,7 @@ public class DeslocamentoService {
     // ATUALIZAR SOMENTE CUSTO REAL (PATCH)
     // ------------------------------------------------------
     @Transactional
-    public Deslocamento atualizarCustoReal(Long id, BigDecimal custoReal) {
+    public Deslocamento atualizarDeslocamento(Long id, BigDecimal custoReal, StatusDeslocamento status) {
 
         logger.info("[SERVICE-DESLOCAMENTO] Atualização de custoReal solicitada. ID={} valor={}",
                 id, custoReal);
@@ -172,10 +169,11 @@ public class DeslocamentoService {
                 });
 
         existente.setCustoReal(custoReal);
+        existente.setStatus(status);
 
         Deslocamento atualizado = deslocamentoRepository.save(existente);
 
-        logger.info("[SERVICE-DESLOCAMENTO] custoReal atualizado com sucesso. ID={} novoValor={}",
+        logger.info("[SERVICE-DESLOCAMENTO] custoReal e Status atualizados com sucesso. ID={} novoValor={}",
                 id, atualizado.getCustoReal());
 
         return atualizado;

@@ -1,7 +1,7 @@
 (function () {
     window.FiberGuardian = window.FiberGuardian || {};
 
-    FiberGuardian.TelaConsultaRecebimento = (function () {
+    FiberGuardian.TelaConsultaDeslocamento = (function () {
         // Variáveis globais dentro do escopo do módulo FiberGuardian.TelaCadastroRecebimento
         //  (não vaza para window).
         let emailUsuario = null;
@@ -20,12 +20,79 @@
             try {
                 emailUsuario = null;
                 paginaAtual = 0;
+
+                document
+                    .getElementById('btnSalvarEdicao')
+                    .addEventListener('click', async function () {
+                        const id = document.getElementById('editDeslocamentoId').value;
+                        const statusDeslocamento =
+                            document.getElementById('editStatus').value;
+
+                        // Converte moeda para número (ou null se vazio)
+                        const custoRealStr =
+                            document.getElementById('editCustoReal').value;
+                        const custoReal =
+                            FiberGuardian.Utils.parseCurrencyToNumber(custoRealStr) ??
+                            null;
+
+                        try {
+                            const csrfToken =
+                                await FiberGuardian.Utils.obterTokenCsrf();
+
+                            const resposta = await fetch(
+                                `/api/deslocamentos/${id}/edicao`,
+                                {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-XSRF-TOKEN': csrfToken,
+                                    },
+                                    credentials: 'include',
+                                    body: JSON.stringify({
+                                        status: statusDeslocamento,
+                                        custoReal: custoReal,
+                                    }),
+                                }
+                            );
+
+                            if (resposta.ok) {
+                                console.log('[DF] Passsou por SUCESS');
+                                FiberGuardian.Utils.exibirMensagemModalComFoco(
+                                    'Deslocamento atualizado com sucesso.',
+                                    'success',
+                                    document.getElementById('editStatus')
+                                );
+
+                                const modalEl = document.getElementById(
+                                    'modalEdicaoDeslocamento'
+                                );
+                                bootstrap.Modal.getInstance(modalEl).hide();
+                                buscarNotas(paginaAtual);
+                            } else if (resposta.status === 403) {
+                                FiberGuardian.Utils.exibirMensagemSessaoExpirada();
+                            } else {
+                                await FiberGuardian.Utils.tratarErroFetch(
+                                    resposta,
+                                    document.getElementById('editStatus')
+                                );
+                            }
+                        } catch (erro) {
+                            console.error('Erro ao atualizar deslocamento:', erro);
+
+                            FiberGuardian.Utils.exibirErroDeRede(
+                                'Erro de rede ao atualizar deslocamento',
+                                document.getElementById('editStatus'),
+                                erro
+                            );
+                        }
+                    });
+
                 const tbody = getTabelaBody();
                 if (tbody) {
                     tbody.innerHTML = '';
                 } else {
                     console.warn(
-                        '[FG] tbody não encontrado ao iniciar tela (provável reconstrução do DOM).'
+                        '[DF] tbody não encontrado ao iniciar tela (provável reconstrução do DOM).'
                     );
                 }
 
@@ -33,18 +100,91 @@
 
                 tabelaBody.addEventListener('click', async (e) => {
                     const btnVerMapa = e.target.closest('.btn-ver-mapa');
+                    const btnEditar = e.target.closest('.btn-editar');
                     const btnExcluir = e.target.closest('.btn-excluir');
-
-                    // evita logs/fluxos desnecessários para outros clicks
-                    if (!btnVerMapa && !btnExcluir) return;
 
                     if (btnVerMapa) {
                         const linha = btnVerMapa.closest('tr');
-                        const codigoNf = linha.children[0].textContent.trim();
-                        const cnpjColaborador = linha.children[2].textContent.trim();
+                        if (!linha) {
+                            console.warn(
+                                `[DF] Linha não encontrada ao tentar abrir modal de edição.`
+                            );
+                            return;
+                        }
+                        const origemEndereco =
+                            linha.getAttribute('data-origem-endereco');
+                        const origemCidade = linha.getAttribute('data-origem-cidade');
+                        const origemEstado = linha.getAttribute('data-origem-estado');
+                        const destinoEndereco = linha.getAttribute(
+                            'data-destino-endereco'
+                        );
+                        const destinoCidade = linha.getAttribute('data-destino-cidade');
+                        const destinoEstado = linha.getAttribute('data-destino-estado');
 
+                        // VALIDAÇÃO
+                        if (!origemCidade || !destinoCidade) {
+                            FiberGuardian.Utils.exibirMensagemModal(
+                                'Dados de origem ou destino incompletos. Não é possível abrir o mapa.',
+                                'warning',
+                                'Informação Incompleta'
+                            );
+                            return;
+                        }
+
+                        // Montar strings completas de origem e destino
+                        const origem =
+                            `${origemEndereco}, ${origemCidade} - ${origemEstado}`.trim();
+                        const destino =
+                            `${destinoEndereco}, ${destinoCidade} - ${destinoEstado}`.trim();
+
+                        // Criar URL do Google Maps
+                        const urlMaps = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+                            origem
+                        )}&destination=${encodeURIComponent(destino)}`;
+
+                        // Abrir em nova aba
+                        window.open(urlMaps, '_blank', 'noopener,noreferrer');
+                    }
+
+                    if (btnEditar) {
+                        const linha = btnEditar.closest('tr');
+                        if (!linha) {
+                            console.warn(
+                                `[DF] Linha não encontrada ao tentar abrir modal de edição.`
+                            );
+                            return;
+                        }
+
+                        // Recupera dados da linha
+                        const deslocamentoId =
+                            linha.getAttribute('data-id-deslocamento');
+                        const status = linha.getAttribute('data-status-deslocamento');
+                        const custoReal = linha.getAttribute(
+                            'data-custo-real-deslocamento'
+                        );
+
+                        // Preenche campos do modal
+                        document.getElementById('editDeslocamentoId').value =
+                            deslocamentoId;
+                        document.getElementById('editStatus').value = status;
+                        document.getElementById('editCustoReal').value =
+                            custoReal || '';
+
+                        // Abre modal
+                        const modal = new bootstrap.Modal(
+                            document.getElementById('modalEdicaoDeslocamento')
+                        );
+                        modal.show();
+                    }
+                    console.log('Botão Excluir ' + btnExcluir);
+                    if (btnExcluir) {
+                        const linha = btnExcluir.closest('tr');
+                        const deslocamentoId =
+                            linha.getAttribute('data-id-deslocamento');
+                        const dataSaida = linha.getAttribute('data-saida-colaborador');
+                        const colaborador = linha.getAttribute('data-nome-colaborador');
                         const confirmado = await FiberGuardian.Utils.confirmarAcaoAsync(
-                            `Deseja realmente excluir o deslocamento ${codigoNf}?`,
+                            `Excluir deslocamento colaborador ${colaborador} planejado para ${dataSaida}?`,
                             'Confirmação de Exclusão'
                         );
 
@@ -55,7 +195,7 @@
                                 await FiberGuardian.Utils.obterTokenCsrf();
 
                             const resposta = await fetch(
-                                `/api/deslocamentos/${cnpjColaborador}/${codigoNf}`,
+                                `/api/deslocamentos/${deslocamentoId}`,
                                 {
                                     method: 'DELETE',
                                     headers: {
@@ -68,7 +208,7 @@
 
                             if (resposta.ok) {
                                 FiberGuardian.Utils.exibirMensagemModal(
-                                    `Deslocamento ${codigoNf} excluída com sucesso.`,
+                                    `Deslocamento colaborador  ${colaborador} - ${dataSaida} excluído com sucesso.`,
                                     'success'
                                 );
                                 buscarNotas(paginaAtual);
@@ -76,127 +216,9 @@
                                 await FiberGuardian.Utils.tratarErroFetch(resposta);
                             }
                         } catch (erro) {
-                            console.error('Erro ao excluir deslocamento:', erro);
+                            console.error('Erro ao excluir nota fiscal:', erro);
                             FiberGuardian.Utils.exibirErroDeRede(
-                                'Erro de rede ao excluir o deslocamento.',
-                                null,
-                                erro
-                            );
-                        }
-                    }
-
-                    if (btnExcluir) {
-                        const linha = btnExcluir.closest('tr');
-                        const codigoNf = linha.children[0].textContent.trim();
-                        const cnpjColaborador = linha.children[2].textContent.trim();
-
-                        console.log('[FG] Código NF : ' + codigoNf);
-                        console.log('[FG] CNPJ : ' + cnpjColaborador);
-
-                        try {
-                            const csrfToken =
-                                await FiberGuardian.Utils.obterTokenCsrf();
-                            const response = await fetch(
-                                `/api/item-notas-fiscais/list/${cnpjColaborador}/${codigoNf}`,
-                                {
-                                    method: 'GET',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'X-XSRF-TOKEN': csrfToken,
-                                    },
-                                    credentials: 'include',
-                                }
-                            );
-
-                            if (!response.ok) {
-                                await FiberGuardian.Utils.tratarErroFetch(response); // corrigido: usar 'response'
-                                return;
-                            }
-
-                            const itens = await response.json();
-
-                            if (!Array.isArray(itens) || itens.length === 0) {
-                                FiberGuardian.Utils.exibirMensagemModal(
-                                    'Nenhum item encontrado para esta Nota Fiscal.',
-                                    'info',
-                                    'Itens da Nota Fiscal'
-                                );
-                                return;
-                            }
-
-                            // monta html da mesma forma que o mock original, com formatação
-                            let htmlTabela = `
-                <div class="table-responsive">
-                <table class="table table-sm table-bordered align-middle">
-                    <thead class="table-light">
-                    <tr>
-                        <th>Cod. Produto</th>
-                        <th>Descrição</th>
-                        <th class="text-end">Quantidade</th>
-                        <th class="text-end">Nº Caixas</th>
-                        <th class="text-end">Preço Unitário</th>
-                        <th class="text-end">Valor Total</th>
-                        <th>Observação</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-                            itens.forEach((item) => {
-                                const codigo = item.produto?.codigo ?? '';
-                                const descricao = item.produto?.descricao ?? '';
-                                const qtd =
-                                    typeof item.qtdRecebida === 'number'
-                                        ? item.qtdRecebida.toLocaleString('pt-BR')
-                                        : item.qtdRecebida ?? '';
-                                const nrCaixas = item.nrCaixas ?? '';
-                                const precoUnit =
-                                    typeof item.precoUnitario === 'number'
-                                        ? item.precoUnitario.toLocaleString('pt-BR', {
-                                              style: 'currency',
-                                              currency: 'BRL',
-                                          })
-                                        : item.precoUnitario ?? '';
-                                const valorTotal =
-                                    typeof item.valorTotalItem === 'number'
-                                        ? item.valorTotalItem.toLocaleString('pt-BR', {
-                                              style: 'currency',
-                                              currency: 'BRL',
-                                          })
-                                        : item.valorTotalItem ?? '';
-                                const obs = item.observacao ?? '';
-
-                                htmlTabela += `
-                                    <tr>
-                                        <td>${codigo}</td>
-                                        <td>${descricao}</td>
-                                        <td class="text-end">${qtd}</td>
-                                        <td class="text-end">${nrCaixas}</td>
-                                        <td class="text-end">${precoUnit}</td>
-                                        <td class="text-end">${valorTotal}</td>
-                                        <td>${obs}</td>
-                                    </tr>
-                                `;
-                            });
-
-                            htmlTabela += `
-                                    </tbody>
-                                </table>
-                                </div>
-                            `;
-
-                            FiberGuardian.Utils.exibirMensagemModal(
-                                { html: htmlTabela, tamanho: 'xl' },
-                                'info',
-                                'Itens da Nota Fiscal'
-                            );
-                        } catch (erro) {
-                            console.error(
-                                'Erro ao carregar itens da Nota Fiscal:',
-                                erro
-                            );
-                            FiberGuardian.Utils.exibirErroDeRede(
-                                'Erro de rede ao carregar os itens da nota fiscal.',
+                                'Erro de rede ao excluir a nota fiscal.',
                                 null,
                                 erro
                             );
@@ -241,7 +263,13 @@
 
                 const dataInicial = document.getElementById('dataInicial');
 
-                FiberGuardian.Utils.fecharQualquerDropdownAberto([inputColaborador]);
+                // Fecha dropdown caso algo abra por padrão
+
+                FiberGuardian.Utils.fecharQualquerDropdownAberto(
+                    [document.getElementById('dropdownColaborador')],
+                    [document.getElementById('colaborador')],
+                    [document.getElementById('btnBuscarColaborador')]
+                );
 
                 // --- Botão Buscar colaborador
                 btnBuscarColaborador.addEventListener('click', async function () {
@@ -380,31 +408,7 @@
 
                 btnLimpar.replaceWith(btnLimpar.cloneNode(true));
                 btnLimpar = document.getElementById('btnLimpar');
-                /*
-                btnLimpar.addEventListener('click', () => {
-                    // Zera variáveis globais
-                    emailUsuario = null;
 
-                    // Limpa inputs
-                    document.getElementById('dataInicial').value = '';
-                    document.getElementById('dataFinal').value = '';
-                    document.getElementById('colaborador').value = '';
-                    document.getElementById('status').value = '';
-                    document.getElementById('nrNotaFiscal').value = '';
-
-                    // Reabilita campos que possam ter ficado readonly/disabled
-                    document.getElementById('colaborador').readOnly = false;
-                    document
-                        .getElementById('colaborador')
-                        .classList.remove('campo-desabilitado');
-                    document.getElementById('btnBuscarColaborador').disabled = false;
-                    document.getElementById('btnTrocarColaborador').disabled = true;
-                    // Limpa tabela e paginação
-                    const tbody = getTabelaBody();
-                    if (tbody) tbody.innerHTML = '';
-                    document.getElementById('paginacao-container').innerHTML = '';
-                });
-                */
                 btnLimpar.addEventListener('click', () => {
                     try {
                         // 1. Zera variáveis globais do módulo
@@ -490,10 +494,8 @@
             try {
                 const csrfToken = await FiberGuardian.Utils.obterTokenCsrf();
 
-                // Captura valores dos filtros
                 const dataInicialValor = document.getElementById('dataInicial').value;
                 const dataFinalValor = document.getElementById('dataFinal').value;
-                //const colaborador = emailUsuario; // já vem do fluxo do colaborador
                 const status = document.getElementById('status').value.trim();
 
                 if (
@@ -555,7 +557,7 @@
             const tabelaBody = getTabelaBody();
             if (!tabelaBody) {
                 console.error(
-                    '[FG] tbody não encontrado — abortando renderização',
+                    '[DF] tbody não encontrado — abortando renderização',
                     dados
                 );
                 return;
@@ -571,6 +573,45 @@
 
             dados.content.forEach((deslocamento) => {
                 const linha = document.createElement('tr');
+
+                linha.setAttribute(
+                    'data-origem-endereco',
+                    deslocamento.origemEndereco || ''
+                );
+
+                linha.setAttribute('data-id-deslocamento', deslocamento.id);
+
+                linha.setAttribute('data-status-deslocamento', deslocamento.status);
+
+                linha.setAttribute(
+                    'data-custo-real-deslocamento',
+                    deslocamento.custoReal || ''
+                );
+
+                linha.setAttribute(
+                    'data-origem-cidade',
+                    deslocamento.origemCidade || ''
+                );
+                linha.setAttribute(
+                    'data-origem-estado',
+                    deslocamento.origemEstado || ''
+                );
+                linha.setAttribute(
+                    'data-destino-endereco',
+                    deslocamento.destinoEndereco || ''
+                );
+                linha.setAttribute(
+                    'data-destino-cidade',
+                    deslocamento.destinoCidade || ''
+                );
+                linha.setAttribute(
+                    'data-destino-estado',
+                    deslocamento.destinoEstado || ''
+                );
+                linha.setAttribute(
+                    'data-nome-colaborador',
+                    deslocamento.nomeUsuario || ''
+                );
 
                 // Formatando valores
                 const valorPrevistoFormatado =
@@ -590,18 +631,27 @@
                         : '-';
 
                 const dataSaidaFormatada = deslocamento.dataSaida
-                    ? new Date(deslocamento.dataSaida).toLocaleDateString('pt-BR')
+                    ? FiberGuardian.Utils.formatarDataHoraUTC(deslocamento.dataSaida)
                     : '-';
 
                 const dataChegadaPrevistaFormatada = deslocamento.dataChegadaPrevista
-                    ? new Date(deslocamento.dataChegadaPrevista).toLocaleDateString(
-                          'pt-BR'
+                    ? FiberGuardian.Utils.formatarDataHoraUTC(
+                          deslocamento.dataChegadaPrevista
                       )
                     : '-';
 
                 const dataChegadaRealFormatada = deslocamento.dataChegadaReal
-                    ? new Date(deslocamento.dataChegadaReal).toLocaleDateString('pt-BR')
+                    ? FiberGuardian.Utils.formatarDataHoraUTC(
+                          deslocamento.dataChegadaReal
+                      )
                     : '-';
+
+                linha.setAttribute('data-saida-colaborador', dataSaidaFormatada || '');
+
+                //const dataChegadaRealFormatada=  FiberGuardian.Utils.formatarDataHoraUTC(deslocamento.dataChegadaReal);
+                //const dataChegadaRealFormatada = deslocamento.dataChegadaReal
+                //    ? new Date(deslocamento.dataChegadaReal).toLocaleDateString('pt-BR')
+                //    : '-';
 
                 const origemDestino = `${deslocamento.origemCidade}/${deslocamento.origemEstado} → ${deslocamento.destinoCidade}/${deslocamento.destinoEstado}`;
 
@@ -628,13 +678,13 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item btn-excluir" href="#">
-                    <i class="fas fa-trash"></i> Excluir
+                    <a class="dropdown-item btn-editar" href="#">
+                    <i class="fa fa-pencil-square-o"></i> Editar
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item btn-custo-real" href="#">
-                    <i class="fas fa-money-bill-wave"></i> Custo Real
+                    <a class="dropdown-item btn-excluir" href="#">
+                    <i class="fas fa-trash"></i> Excluir
                     </a>
                 </li>
                 </ul>
@@ -650,7 +700,7 @@
             const paginacaoDiv =
                 document.getElementById('paginacao') || document.createElement('div');
             paginacaoDiv.id = 'paginacao';
-            paginacaoDiv.className = 'd-flex justify-content-center mt-3';
+            paginacaoDiv.className = 'd-flex justify-content-center mt-3 mb-4';
 
             paginacaoDiv.innerHTML = `
         <button id="btnAnterior" class="btn btn-secondary me-2" ${
