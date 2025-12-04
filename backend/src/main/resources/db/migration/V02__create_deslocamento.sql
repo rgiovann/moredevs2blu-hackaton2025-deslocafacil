@@ -11,7 +11,7 @@ CREATE TABLE deslocamento (
     data_saida DATETIME NOT NULL,
     data_chegada_prevista DATETIME NOT NULL,
     data_chegada_real DATETIME NULL,
-    meio_transporte ENUM('AVIAO','ONIBUS','CARRO','UBER/99','TAXI','BARCO','OUTROS') NOT NULL,
+    meio_transporte ENUM('AVIAO','ONIBUS','CARRO','UBER_99','TAXI','BARCO','OUTROS') NOT NULL,
     custo_estimado DECIMAL(10,2) NULL,
     custo_real DECIMAL(10,2) NULL,
     status ENUM('PLANEJADO','EM_TRANSITO','ATRASADO','CONCLUIDO','CANCELADO')
