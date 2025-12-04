@@ -60,9 +60,9 @@
                 'assets/js/fiberguardian_utils.js',
                 'assets/js/tela_lista_cadastro_usuario.js',
             ],
-            'tela_consulta_recebimento.html': [
+            'tela_consulta_deslocamento.html': [
                 'assets/js/fiberguardian_utils.js',
-                'assets/js/tela_consulta_recebimento.js',
+                'assets/js/tela_consulta_deslocamento.js',
             ],
         };
 

@@ -6,7 +6,7 @@ import edu.entra21.fiberguardian.assembler.DeslocamentoPagedDtoAssembler;
 import edu.entra21.fiberguardian.dto.DeslocamentoDto;
 import edu.entra21.fiberguardian.dto.DeslocamentoPagedDto;
 import edu.entra21.fiberguardian.dto.PageDto;
-import edu.entra21.fiberguardian.input.DeslocamentoCustoRealInput;
+import edu.entra21.fiberguardian.input.DeslocamentoEdicaoInput;
 import edu.entra21.fiberguardian.input.DeslocamentoInput;
 import edu.entra21.fiberguardian.model.Deslocamento;
 import edu.entra21.fiberguardian.service.DeslocamentoService;
@@ -132,13 +132,13 @@ public class DeslocamentoController {
         deslocamentoService.excluir(id);
     }
 
-    @PatchMapping("/{id}/custo-real")
+    @PatchMapping("/{id}/edicao")
     @ResponseStatus(HttpStatus.OK)
     public DeslocamentoDto atualizarCustoReal(
             @PathVariable Long id,
-            @RequestBody DeslocamentoCustoRealInput input) {
+            @RequestBody DeslocamentoEdicaoInput input) {
 
-        Deslocamento deslocamentoAtualizado = deslocamentoService.atualizarCustoReal(id, input.getCustoReal());
+        Deslocamento deslocamentoAtualizado = deslocamentoService.atualizarDeslocamento(id, input.getCustoReal(),input.getStatus());
         return deslocamentoDtoAssembler.toDto(deslocamentoAtualizado);
     }
 }

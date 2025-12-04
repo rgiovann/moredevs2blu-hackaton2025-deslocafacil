@@ -15,9 +15,10 @@ public class DeslocamentoPagedDto {
     private String nomeUsuario;
     private String origemCidade;
     private Estado origemEstado;
+    private String destinoEndereco;
+    private String origemEndereco;
     private String destinoCidade;
     private Estado destinoEstado;
-    private String destinoEndereco;
     private String motivo;
     private OffsetDateTime dataSaida;
     private OffsetDateTime dataChegadaPrevista;
