@@ -37,3 +37,7 @@ frontend/cert/key.pem
 
 ### Executáveis auxiliares ###
 frontend/cert/caddy.exe
+
+## chaves
+*.pem
+*.p12

@@ -1,0 +1,27 @@
+version: "3.9"
+#somente backend
+services:
+  backend:
+    build: ./backend
+    container_name: deslocafacil-backend
+    ports:
+      - "8080:8080"
+
+    environment:
+      # Variáveis sensíveis vindas do SSM (o user-data exporta antes de rodar o compose)
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_URL: "${DB_URL}"
+      FLYWAY_URL: "${FLYWAY_URL}"
+      FLYWAY_USER: "${FLYWAY_USER}"
+      FLYWAY_PASSWORD: "${FLYWAY_PASSWORD}"
+
+      # Caminho das chaves (se o backend estiver configurado para usar TLS com PEM)
+      TLS_KEY_PATH: "/app/ssl/key.pem"
+      TLS_CERT_PATH: "/app/ssl/cert.pem"
+
+    volumes:
+      # Chaves PEM baixadas no user-data
+      - /home/admin/backend_ssl:/app/ssl
+
+    restart: unless-stopped
