@@ -1,6 +1,16 @@
-version: "3.9"
-#somente backend
+#somente backend & db
 services:
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: deslocafacil
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      
   backend:
     build: ./backend
     container_name: deslocafacil-backend
@@ -19,9 +29,5 @@ services:
       # Caminho das chaves (se o backend estiver configurado para usar TLS com PEM)
       TLS_KEY_PATH: "/app/ssl/key.pem"
       TLS_CERT_PATH: "/app/ssl/cert.pem"
-
-    volumes:
-      # Chaves PEM baixadas no user-data
-      - /home/admin/backend_ssl:/app/ssl
 
     restart: unless-stopped
