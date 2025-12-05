@@ -1,0 +1,81 @@
+.checkpoint-card {
+    border-left: 5px solid var(--bs-primary);
+    transition: all 0.2s;
+}
+.checkpoint-card.partida {
+    border-left-color: #28a745;
+}
+.checkpoint-card.intermediario {
+    border-left-color: #ffc107;
+}
+.checkpoint-card.chegada {
+    border-left-color: #dc3545;
+}
+.checkpoint-icon {
+    font-size: 1.8rem;
+    margin-right: 12px;
+}
+.ordem-badge {
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+}
+
+.dropdown-deslocamento-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.tabela-checkpoint-header {
+    background-color: #f1f5f9;
+    font-weight: 600;
+}
+
+.btn-custom {
+    padding: 10px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Label da dropdown com ícone */
+.dropdown-deslocamento-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Tabela no padrão do sistema */
+.table-container {
+    width: 100%;
+    margin-top: 1rem;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.table-container table {
+    margin-bottom: 0;
+}
+
+.table-container thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #212529 !important;
+    color: white !important;
+}
+
+/* Botão sair */
+.btn-custom {
+    min-width: 120px;
+    margin: 5px;
+}
+
+/*
+.form-container {
+    background: #e3f2fd;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+    */
+
+.card {
+    background: #e3f2fd !important;
+}

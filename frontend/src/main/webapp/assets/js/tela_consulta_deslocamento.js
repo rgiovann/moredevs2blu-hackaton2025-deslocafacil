@@ -34,6 +34,11 @@
                         const custoReal =
                             FiberGuardian.Utils.parseCurrencyToNumber(custoRealStr) ??
                             null;
+                        const dataChegadaRealizada =
+                            FiberGuardian.Utils.converterInputDatetimeParaUtcIso(
+                                document.getElementById('editDataChegadaRealizada')
+                                    .value
+                            );
 
                         try {
                             const csrfToken =
@@ -51,6 +56,7 @@
                                     body: JSON.stringify({
                                         status: statusDeslocamento,
                                         custoReal: custoReal,
+                                        dataChegadaReal: dataChegadaRealizada,
                                     }),
                                 }
                             );
@@ -163,6 +169,14 @@
                             'data-custo-real-deslocamento'
                         );
 
+                        const dataChegadaRealizada = linha.getAttribute(
+                            'data-data-chegada-realizada'
+                        );
+                        document.getElementById('editDataChegadaRealizada').value =
+                            FiberGuardian.Utils.toInputDateTimeLocal(
+                                dataChegadaRealizada
+                            );
+
                         // Preenche campos do modal
                         document.getElementById('editDeslocamentoId').value =
                             deslocamentoId;
@@ -176,7 +190,7 @@
                         );
                         modal.show();
                     }
-                    console.log('Botão Excluir ' + btnExcluir);
+
                     if (btnExcluir) {
                         const linha = btnExcluir.closest('tr');
                         const deslocamentoId =
@@ -611,6 +625,11 @@
                 linha.setAttribute(
                     'data-nome-colaborador',
                     deslocamento.nomeUsuario || ''
+                );
+
+                linha.setAttribute(
+                    'data-data-chegada-realizada',
+                    deslocamento.dataChegadaReal || ''
                 );
 
                 // Formatando valores

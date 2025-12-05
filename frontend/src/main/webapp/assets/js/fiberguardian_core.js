@@ -13,9 +13,9 @@
                 'assets/js/fiberguardian_utils.js',
                 'assets/js/tela_cadastro_deslocamento.js',
             ],
-            'tela_cadastro_fornecedor.html': [
+            'tela_checkpoint.html': [
                 'assets/js/fiberguardian_utils.js',
-                'assets/js/tela_cadastro_fornecedor.js',
+                'assets/js/tela_checkpoint.js',
             ],
             'tela_consulta_fornecedor.html': [
                 'assets/js/fiberguardian_utils.js',
