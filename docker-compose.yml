@@ -6,8 +6,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: deslocafacil
-    ports:
-      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
       
@@ -16,7 +14,9 @@ services:
     container_name: deslocafacil-backend
     ports:
       - "8080:8080"
-
+    depends_on:
+      - mariadb   # garante que o container do banco sobe antes
+     
     environment:
       # Variáveis sensíveis vindas do SSM (o user-data exporta antes de rodar o compose)
       DB_USER: "${DB_USER}"
