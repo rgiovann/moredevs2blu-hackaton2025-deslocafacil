@@ -372,6 +372,30 @@
 
             return dia + '/' + mes + '/' + ano + ' - ' + hora + ':' + minuto;
         }
+        // para popular html input tipo data/hora
+        function toInputDateTimeLocal(utcString) {
+            // Garante que só processa valores válidos
+            if (!utcString || utcString.trim() === '') {
+                return ''; // ← Input fica vazio (comportamento esperado)
+            }
+
+            const dt = new Date(utcString);
+
+            // Valida se a data é válida (importante!)
+            if (isNaN(dt.getTime())) {
+                console.warn('⚠️ Data inválida recebida:', utcString);
+                return '';
+            }
+
+            // Formata para o padrão datetime-local (YYYY-MM-DDTHH:MM)
+            const ano = dt.getFullYear();
+            const mes = String(dt.getMonth() + 1).padStart(2, '0');
+            const dia = String(dt.getDate()).padStart(2, '0');
+            const hora = String(dt.getHours()).padStart(2, '0');
+            const min = String(dt.getMinutes()).padStart(2, '0');
+
+            return `${ano}-${mes}-${dia}T${hora}:${min}`;
+        }
 
         // Função para aplicar máscara monetária com vírgula e duas casas decimais
         function aplicarMascaraMonetaria(input) {
@@ -602,6 +626,7 @@
             setCurrentDate,
             converterInputDatetimeParaUtcIso,
             formatarDataHoraUTC,
+            toInputDateTimeLocal,
         };
     })();
 })();

@@ -99,10 +99,6 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/api/usuarios/validar-admin").permitAll() // checar sem token-csrf
 
 						// ESPECÍFICAS PRIMEIRO - antes das regras gerais
-						.requestMatchers(HttpMethod.GET, "/api/fornecedores/list/recebimento/**").hasAnyAuthority(ROLE_LISTAGEM)
-						.requestMatchers(HttpMethod.GET, "/api/notas-fiscais/list/por_fornecedor/**").hasAnyAuthority(ROLE_LISTAGEM)
-						.requestMatchers(HttpMethod.GET, "/api/item-notas-fiscais/list/**").hasAnyAuthority(ROLE_LISTAGEM)
-						.requestMatchers(HttpMethod.GET, "/api/notas-fiscais/list/**").hasAnyAuthority(ROLE_LISTAGEM)
 						.requestMatchers(HttpMethod.GET, "/api/usuarios/lista-usuario-por-role").hasAnyAuthority(ROLE_LISTAGEM)
 						.requestMatchers(HttpMethod.PUT, "/api/deslocamentos").hasAuthority(Role.ADMIN.getAuthority())
 						.requestMatchers(HttpMethod.GET, "/api/deslocamentos").hasAuthority(Role.ADMIN.getAuthority())
@@ -113,16 +109,6 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "/api/usuarios").hasAuthority(Role.ADMIN.getAuthority())
 						.requestMatchers(HttpMethod.PUT, "/api/ativo").hasAuthority(Role.ADMIN.getAuthority())
 						.requestMatchers(HttpMethod.DELETE, "/api/ativo").hasAuthority(Role.ADMIN.getAuthority())
-
-
-
-						.requestMatchers(HttpMethod.POST, "/api/notas-fiscais/**").hasAnyAuthority(ROLE_ADMIN_USUARIO)
-						.requestMatchers(HttpMethod.PUT, "/api/notas-fiscais/**").hasAnyAuthority(Role.ADMIN.getAuthority())
-						.requestMatchers(HttpMethod.DELETE, "/api/notas-fiscais/**").hasAnyAuthority(Role.ADMIN.getAuthority())
-						.requestMatchers(HttpMethod.GET, "/api/notas-fiscais/**").hasAnyAuthority(ROLE_ADMIN_USUARIO)
-
-
-
 
 						.requestMatchers(HttpMethod.POST, "/api/fg-logout").authenticated()
 						.requestMatchers(HttpMethod.POST, "/api/usuarios/alterar-senha").authenticated()

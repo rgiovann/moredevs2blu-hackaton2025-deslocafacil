@@ -12,7 +12,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/tela_cadastro_deslocamento.css" />
   <link rel="stylesheet" href="assets/css/tela_consulta_deslocamento.css" />
-
   <link rel="stylesheet" href="assets/css/dropdown_generico.css" />
 
 </head>
@@ -208,6 +207,14 @@
               <i class="fas fa-money-bill-wave me-2"></i>Custo Real
             </label>
             <input type="text" class="form-control" id="editCustoReal" placeholder="R$ 0,00" />
+          </div>
+
+          <div class="mb-3">
+            <label for="editDataChegadaRealizada" class="form-label">
+              <i class="fas fa-calendar-check me-2"></i>Data e Hora de Chegada Prevista
+            </label>
+            <input type="datetime-local" id="editDataChegadaRealizada" name="editDataChegadaRealizada"
+              class="form-control" required />
           </div>
 
         </div>

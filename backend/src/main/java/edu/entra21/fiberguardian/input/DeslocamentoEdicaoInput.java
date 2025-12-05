@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Setter
 @Getter
@@ -19,4 +20,6 @@ public class DeslocamentoEdicaoInput {
     @NotNull(message = "O status do deslocamento é obrigatório.")
     @Enumerated(EnumType.STRING)
     private StatusDeslocamento status;
+
+    private OffsetDateTime dataChegadaReal;
 }

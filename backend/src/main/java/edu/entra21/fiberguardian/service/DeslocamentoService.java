@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Service
 @Transactional(readOnly = true)
@@ -152,7 +153,7 @@ public class DeslocamentoService {
     // ATUALIZAR SOMENTE CUSTO REAL (PATCH)
     // ------------------------------------------------------
     @Transactional
-    public Deslocamento atualizarDeslocamento(Long id, BigDecimal custoReal, StatusDeslocamento status) {
+    public Deslocamento atualizarDeslocamento(Long id, BigDecimal custoReal, StatusDeslocamento status, OffsetDateTime dataChegadaReal) {
 
         logger.info("[SERVICE-DESLOCAMENTO] Atualização de custoReal solicitada. ID={} valor={}",
                 id, custoReal);
@@ -170,6 +171,7 @@ public class DeslocamentoService {
 
         existente.setCustoReal(custoReal);
         existente.setStatus(status);
+        existente.setDataChegadaReal(dataChegadaReal);
 
         Deslocamento atualizado = deslocamentoRepository.save(existente);
 

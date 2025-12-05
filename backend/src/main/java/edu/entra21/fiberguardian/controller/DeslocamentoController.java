@@ -138,7 +138,7 @@ public class DeslocamentoController {
             @PathVariable Long id,
             @RequestBody DeslocamentoEdicaoInput input) {
 
-        Deslocamento deslocamentoAtualizado = deslocamentoService.atualizarDeslocamento(id, input.getCustoReal(),input.getStatus());
+        Deslocamento deslocamentoAtualizado = deslocamentoService.atualizarDeslocamento(id, input.getCustoReal(),input.getStatus(),input.getDataChegadaReal());
         return deslocamentoDtoAssembler.toDto(deslocamentoAtualizado);
     }
 }
