@@ -13,7 +13,7 @@ services:
     build: ./backend
     container_name: deslocafacil-backend
     ports:
-      - "8080:8080"
+      - "8443:8443"
     depends_on:
       - mariadb   # garante que o container do banco sobe antes
      
@@ -31,3 +31,6 @@ services:
       TLS_CERT_PATH: "/app/ssl/cert.pem"
 
     restart: unless-stopped
+
+volumes:
+  db_data:    
