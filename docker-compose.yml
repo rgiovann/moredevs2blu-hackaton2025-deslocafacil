@@ -1,8 +1,10 @@
-#somente backend & db
 services:
   mariadb:
     image: mariadb:11
     container_name: mariadb
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4    
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: deslocafacil
@@ -31,6 +33,17 @@ services:
       TLS_CERT_PATH: "/app/ssl/cert.pem"
 
     restart: unless-stopped
+    
+  frontend:
+    build: ./frontend
+    container_name: deslocafacil-frontend
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    depends_on:
+      - backend
+    ports:
+      - "443:443"    
 
 volumes:
   db_data:    
