@@ -4,12 +4,12 @@ FROM nginx:alpine
 RUN mkdir -p /etc/ssl/private \
     && rm -f /etc/nginx/conf.d/default.conf
 
-# Copia HTML/JS/CSS para o NGINX
-COPY webapp/ /usr/share/nginx/html/
+# Copia HTML/JS/CSS para o NGINX (estrutura correta)
+COPY src/main/webapp/ /usr/share/nginx/html/
 
-# Copia certificados
-COPY certs/cert.pem /etc/ssl/certs/cert.pem
-COPY certs/key.pem /etc/ssl/private/key.pem
+# Copia certificados (diretório correto: cert/ não certs/)
+COPY cert/cert.pem /etc/ssl/certs/cert.pem
+COPY cert/key.pem /etc/ssl/private/key.pem
 
 # Permissões adequadas
 RUN chmod 644 /etc/ssl/certs/cert.pem \
