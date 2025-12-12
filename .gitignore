@@ -4,7 +4,6 @@ backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 backend/src/main/resources/cookies.txt
-frontend/cert/key.pem
 
 ### STS ###
 *.class
@@ -41,3 +40,6 @@ frontend/cert/caddy.exe
 ## chaves
 *.pem
 *.p12
+
+## Webhint
+.hintrc
