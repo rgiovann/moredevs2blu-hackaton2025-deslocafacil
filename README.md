@@ -4,7 +4,7 @@
 
 MVP de sistema de mobilidade corporativa desenvolvido para o **Hackathon 2025 +Devs2Blu da Blusoft**, que permite gerenciar deslocamentos de colaboradores para eventos, treinamentos e onboardings.
 
-**RESULTADO DA 5a EDIÇÃO DO HACKATON +Devs2Blu : 4a lugar entre 14 grupos participantes!**
+##### **RESULTADO DA 5a EDIÇÃO DO HACKATON +Devs2Blu : 4º lugar entre 14 grupos participantes!**
 
 ###  Desafio
 
@@ -117,8 +117,8 @@ Pontos de controle ao longo do trajeto.
 
 ### Autorização por Role
 
-Usuarios de perfil ADMIN podem criar, editar e consultar deslocamentos. Criar, deletar, alterar checkpoints, ativar e desativar usuarios.
-Usuários de perfil USUÁRIO podem adicionar checkpoints em seus deslocamentos ativos e alterar seus dados de usuário.
+- Usuarios de perfil ADMIN podem criar, editar e consultar deslocamentos. Criar, deletar, alterar checkpoints, ativar e desativar usuarios.
+- Usuários de perfil USUÁRIO podem adicionar checkpoints em seus deslocamentos ativos e alterar seus dados de usuário.
 
 
 ## 📁 Estrutura do Projeto
@@ -316,22 +316,6 @@ Checkpoint 3 → Checkpoint 4 (CHEGADA)
 ```
 
 Cada trecho pode ser visualizado individualmente no Google Maps.
-
----
-
-## 🧪 Testes
-
-### Executar Testes
-```bash
-mvn test
-```
-
----
-
-### Cobertura (em planejamento)
-```bash
-mvn clean verify jacoco:report
-```
 
 ---
 
