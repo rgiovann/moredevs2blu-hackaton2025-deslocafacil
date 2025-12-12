@@ -4,7 +4,9 @@
 
 MVP de sistema de mobilidade corporativa desenvolvido para o **Hackathon 2025 +Devs2Blu da Blusoft**, que permite gerenciar deslocamentos de colaboradores para eventos, treinamentos e onboardings.
 
-### Contexto
+**RESULTADO DA 5a EDIÇÃO DO HACKATON +Devs2Blu : 4a lugar entre 14 grupos participantes!**
+
+###  Desafio
 
 Empresas que recebem colaboradores de outras cidades/estados enfrentam dificuldades em:
 - Acompanhar deslocamentos em tempo real
@@ -29,7 +31,7 @@ Sistema centralizado que permite:
 ### Stack Tecnológica
 
 **Backend:**
-- Java 17+
+- Java 21+
 - Spring Boot 3.5.3
 - Spring Security (autenticação baseada em sessão + CSRF)
 - Spring Data JPA
@@ -44,7 +46,10 @@ Sistema centralizado que permite:
 
 **Infraestrutura:**
 - Maven
-- Docker (em planejamento)
+- Docker 
+- Docker Compose
+- Terraform
+- AWS EC2
 
 ---
 
@@ -112,90 +117,9 @@ Pontos de controle ao longo do trajeto.
 
 ### Autorização por Role
 
-| Endpoint | ADMIN | USUARIO |
-|----------|-------|---------|
-| POST /api/usuarios | ✅ | ❌ |
-| GET /api/usuarios | ✅ | ❌ |
-| PUT /api/ativo | ✅ | ❌ |
-| POST /api/usuarios/reset-senha | ✅ | ❌ |
-| GET /api/usuarios/me/nome | ✅ | ✅ |
-| PUT /api/usuarios/me/senha | ✅ | ✅ |
+Usuarios de perfil ADMIN podem criar, editar e consultar deslocamentos. Criar, deletar, alterar checkpoints, ativar e desativar usuarios.
+Usuários de perfil USUÁRIO podem adicionar checkpoints em seus deslocamentos ativos e alterar seus dados de usuário.
 
-### CORS
-Configurado para origens específicas:
-```
-- https://localhost:5500
-- https://localhost:8080
-- https://127.0.0.1:5500
-```
-
----
-
-## 🚀 Instalação e Execução
-
-### Pré-requisitos
-```bash
-- Java 17+
-- Maven 3.8+
-- MySQL 8.0+
-```
-
-### 1. Clonar o Repositório
-```bash
-git clone https://github.com/seu-usuario/deslocafacil.git
-cd deslocafacil
-```
-
-### 2. Configurar Banco de Dados
-
-Criar database:
-```sql
-CREATE DATABASE deslocafacil CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-Executar scripts SQL da pasta `/database`:
-```sql
-source database/01_create_tables.sql
-source database/02_insert_data.sql
-```
-
-### 3. Configurar application.properties
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/deslocafacil
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-
-spring.jpa.hibernate.ddl-auto=validate
-spring.jpa.show-sql=true
-```
-
-### 4. Executar Backend
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run
-```
-
-Aplicação disponível em: `https://localhost:8080`
-
-### 5. Executar Frontend
-
-Com Live Server (VSCode):
-```
-1. Abrir pasta /frontend no VSCode
-2. Clicar com botão direito em index.html
-3. Selecionar "Open with Live Server"
-```
-
-Ou servidor HTTP simples:
-```bash
-cd frontend
-python -m http.server 5500
-```
-
-Frontend disponível em: `https://localhost:5500`
-
----
 
 ## 📁 Estrutura do Projeto
 
@@ -331,6 +255,8 @@ DELETE /api/deslocamentos/{id}     # Cancelar
 GET    /api/deslocamentos/ativos   # Listar em trânsito/atrasados
 ```
 
+---
+
 ### Checkpoints (EM DESENVOLVIMENTO)
 
 ```
@@ -352,9 +278,12 @@ PUT    /api/checkpoints/{id}               # Atualizar
 - [x] Exception handling global
 - [x] Auditoria automática (JPA Auditing)
 - [x] Frontend base (tela principal, login)
+- [x] CRUD de Deslocamentos
+- [x] Consulta dinâmica de Deslocamentos usando filtros
+- [x] Integração Google Maps
 
-### 🚧 Em Desenvolvimento
-- [ ] CRUD de Deslocamentos
+### 🚧 Em Desenvolvimento (Mocks)
+
 - [ ] CRUD de Checkpoints
 - [ ] Dashboard de acompanhamento
 - [ ] Integração Google Maps
@@ -373,6 +302,8 @@ O sistema utiliza a **Google Maps Directions URL** para exibir rotas sem necessi
 const url = `https://www.google.com/maps/dir/?api=1&origin=${origem}&destination=${destino}`;
 window.open(url, '_blank');
 ```
+
+---
 
 ### Estratégia de Checkpoints
 
@@ -395,6 +326,8 @@ Cada trecho pode ser visualizado individualmente no Google Maps.
 mvn test
 ```
 
+---
+
 ### Cobertura (em planejamento)
 ```bash
 mvn clean verify jacoco:report
@@ -410,42 +343,170 @@ mvn clean verify jacoco:report
 @Email(message = "Email deve ser válido")
 @Size(max = 50, message = "Email deve ter até 50 caracteres")
 ```
+---
 
 ### @SenhaValida
 ```java
 @NotBlank(message = "A senha é obrigatória")
 @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
 ```
+---
 
-### @RecebimentoRecente
-```java
-// Valida se a data não excede X meses no passado
-@RecebimentoRecente(mesesMaximo = 6)
+# 🐳 Construção dos Containers e Arquitetura Docker
+
+A aplicação roda 100% containerizada, utilizando **Docker** + **Docker Compose** para orquestração. A arquitetura é composta por três serviços principais:
+
+```
+mariadb ← backend (Spring Boot) ← frontend (NGINX + TLS)
+```
+
+## Backend (Dockerfile multi-stage)
+
+O backend usa **multi-stage build** para reduzir tamanho e melhorar segurança:
+
+### 🔨 Stage 1 — Build
+
+* Base: `maven:3.9-eclipse-temurin-21`
+* Compila o projeto e gera o fat-JAR via Maven
+
+### 🚀 Stage 2 — Runtime
+
+* Base: `eclipse-temurin:21-jre-jammy`
+* Copia o JAR final
+* Expõe a porta `8443`
+* Executa via `java -jar`
+
+
+Motivação: separar dependências de build e runtime → imagens menores, mais seguras.
+
+---
+
+## Frontend (NGINX + TLS real)
+
+A imagem do frontend:
+
+* Usa `nginx:alpine`
+* Serve arquivos HTML/JS/CSS estáticos
+* Recebe automaticamente via user-data:
+
+  * `cert.pem`
+  * `key.pem`
+* Configura NGINX para servir em **HTTPS nativo (porta 443)**
+* Remove config padrão e aplica seu próprio `nginx.conf`
+
+
+### nginx.conf – Reverse Proxy Seguro com TLS
+
+O frontend faz proxy para o backend desta forma:
+
+* Frontend em: `https://ec2/`
+* Backend em: `https://deslocafacil-backend:8443/api/...`
+
+Componentes principais:
+
+* Resolução dinâmica via `resolver 127.0.0.11` (Docker internal DNS)
+* `proxy_ssl_verify off` para permitir TLS interno autoassinado
+* Forward correto de headers (`X-Forwarded-*`)
+
+
+Motivação: segurança de ponta a ponta, inclusive dentro da rede Docker.
+
+---
+
+## Docker Compose — Orquestração Completa
+
+O `docker-compose.yml` define 3 serviços:
+
+### 📌 mariadb
+
+* Armazena dados persistidos
+* Volume dedicado `db_data`
+* Apenas backend tem acesso a ele
+
+
+### 📌 backend
+
+* Build via Dockerfile
+* Lê variáveis sensíveis do `.env` gerado via SSM
+* Inclui caminhos para chaves/certificados
+* Reinício automático `restart: unless-stopped`
+* Expõe `8443` para o NGINX
+
+
+### 📌 frontend
+
+* Build do Dockerfile do NGINX
+* Depende do backend
+* Expõe a porta `443` ao mundo
+* Serve o site estático
+* Proxy seguro para o backend
+
+
+Motivação: arquitetura limpa, de três camadas, totalmente isolada:
+
+```
+[Usuário] → HTTPS → [NGINX Frontend] → HTTPS → [Spring Boot] → [MariaDB]
 ```
 
 ---
 
-## 🐛 Troubleshooting
+# 🏭 Infraestrutura (AWS + Terraform)
 
-### Erro: CSRF token inválido
-```bash
-# Solução: Obter novo token antes de cada requisição mutável
-GET /api/csrf-token
-```
+A infraestrutura é provisionada via **Terraform**, garantindo reprodutibilidade, mínimo esforço operacional e segurança centralizada por IAM + SSM Parameter Store.
+Ela cria automaticamente:
 
-### Erro: Session expirada
-```bash
-# Solução: Fazer login novamente
-POST /api/fg-login
-```
+### 🔐 Rede e Segurança
 
-### Erro: No property 'email' found for type 'Deslocamento'
-```bash
-# Causa: Método findByEmail no DeslocamentoRepository
-# Solução: Remover método ou ajustar para findByUsuarioEmail
-```
+* **Security Group dedicado** permitindo apenas:
+
+  * `22` (SSH)
+  * `8443` (backend Spring Boot com TLS)
+  * `443` (frontend NGINX com TLS)
+    Todas as saídas são liberadas para permitir update, clone, SSM, etc.
+
+
+### 🧩 IAM e Acesso Seguro a Secrets
+
+* Criação de uma **IAM Role** exclusiva para a EC2.
+* Permite acesso somente ao prefixo de parâmetros seguros no SSM:
+  `/hackaton-devs2blu/backend/*`
+* Policies para **decrypt via KMS** e leitura de parâmetros sensíveis:
+
+  * credenciais do Banco
+  * credenciais do Flyway
+  * senhas de keystore
+  * certificados SSL (Key + Cert)
+
+
+### 🖥️ EC2 Automatizada com User Data
+
+A máquina EC2 (Debian 12) é criada com:
+
+* Docker Engine + Compose instalados
+* Java 21 e Maven
+* AWS CLI
+* Clone automático do repositório
+* Download seguro dos certificados TLS via SSM
+* Correção, revalidação e normalização do formato PEM
+* Criação do `.env` preenchido dinamicamente
+* Build automático do backend (`mvn clean package`)
+* Execução do `docker compose up -d`
+
+
+### ✔ Objetivo da Infra
+
+Produzir um ambiente totalmente **autogerenciado**, onde subir uma nova EC2 já entrega:
+
+* Certificados válidos
+* Variáveis sensíveis carregadas
+* Backend compilado
+* Containers rodando
+* Frontend e API expostos em HTTPS
 
 ---
+
+
+
 
 ## 👥 Equipe
 
