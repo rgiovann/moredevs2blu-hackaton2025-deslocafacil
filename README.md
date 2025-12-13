@@ -477,6 +477,29 @@ A máquina EC2 (Debian 12) é criada com:
 * Execução do `docker compose up -d`
 
 
+### Diagrama da Infra (AWS)
+
+flowchart TB
+    User["Usuário / Browser"]
+    
+    subgraph AWS["AWS Cloud"]
+        subgraph EC2["EC2 Debian 12"]
+            subgraph Docker["Docker Compose"]
+                FE["NGINX Frontend<br/>HTTPS :443"]
+                BE["Spring Boot Backend<br/>HTTPS :8443"]
+                DB[("MariaDB")]
+            end
+        end
+        SSM["AWS SSM<br/>Parameter Store"]
+    end
+    
+    User -->|HTTPS| FE
+    FE -->|HTTPS interno<br/>/api| BE
+    BE -->|JDBC| DB
+    SSM -->|Secrets| BE
+    SSM -->|TLS cert/key| FE
+
+
 ### ✔ Objetivo da Infra
 
 Produzir um ambiente totalmente **autogerenciado**, onde subir uma nova EC2 já entrega:
@@ -486,11 +509,6 @@ Produzir um ambiente totalmente **autogerenciado**, onde subir uma nova EC2 já 
 * Backend compilado
 * Containers rodando
 * Frontend e API expostos em HTTPS
-
----
-
-
-
 
 ## 👥 Equipe
 
