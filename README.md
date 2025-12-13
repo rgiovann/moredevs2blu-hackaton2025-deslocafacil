@@ -477,8 +477,9 @@ A máquina EC2 (Debian 12) é criada com:
 * Execução do `docker compose up -d`
 
 
-### Diagrama da Infra (AWS)
+### Arquitetura da Infra do Sistema LocalizaFacil (AWS)
 
+```mermaid
 flowchart TB
     User["Usuário / Browser"]
     
@@ -498,6 +499,7 @@ flowchart TB
     BE -->|JDBC| DB
     SSM -->|Secrets| BE
     SSM -->|TLS cert/key| FE
+```
 
 
 ### ✔ Objetivo da Infra
