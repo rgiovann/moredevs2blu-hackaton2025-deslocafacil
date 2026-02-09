@@ -1,39 +1,39 @@
-# DeslocaFácil - Sistema de Mobilidade Corporativa
+# DeslocaFácil - Corporate Mobility System
 
-## 📋 Sobre o Projeto
+## 📋 About the Project
 
-MVP de sistema de mobilidade corporativa desenvolvido para o **Hackathon 2025 +Devs2Blu da Blusoft**, que permite gerenciar deslocamentos de colaboradores para eventos, treinamentos e onboardings.
+Corporate mobility system MVP developed for the **Hackathon 2025 +Devs2Blu by Blusoft**, which manages employee travel for events, training, and onboarding.
 
-##### **RESULTADO DA 5a EDIÇÃO DO HACKATON +Devs2Blu : 4º lugar entre 14 grupos participantes!**
+##### **RESULT OF THE 5th EDITION OF HACKATON +Devs2Blu: 4th place among 14 participating groups!**
 
-###  Desafio
+### Challenge
 
-Empresas que recebem colaboradores de outras cidades/estados enfrentam dificuldades em:
-- Acompanhar deslocamentos em tempo real
-- Prever atrasos e estimar custos
-- Organizar horários de chegada
-- Consolidar histórico de viagens
+Companies that receive employees from other cities/states face difficulties with:
+- Tracking travel in real time
+- Predicting delays and estimating costs
+- Organizing arrival times
+- Consolidating travel history
 
-### Solução
+### Solution
 
-Sistema centralizado que permite:
-- ✅ Registrar deslocamentos de colaboradores
-- ✅ Organizar rotas e horários
-- ✅ Monitorar status de chegada
-- ✅ Exibir trajetos com integração Google Maps
-- ✅ Realizar check-in de presença em checkpoints
-- ✅ Analisar histórico para previsão de custos
+Centralized system that allows:
+- ✅ Register employee travel
+- ✅ Organize routes and schedules
+- ✅ Monitor arrival status
+- ✅ Display routes with Google Maps integration
+- ✅ Check-in at checkpoints
+- ✅ Analyze history for cost forecasting
 
 ---
 
-## 🏗️ Arquitetura
+## 🗃️ Architecture
 
-### Stack Tecnológica
+### Tech Stack
 
 **Backend:**
 - Java 21+
 - Spring Boot 3.5.3
-- Spring Security (autenticação baseada em sessão + CSRF)
+- Spring Security (session-based authentication + CSRF)
 - Spring Data JPA
 - MySQL 8.0
 - ModelMapper
@@ -42,9 +42,9 @@ Sistema centralizado que permite:
 - HTML5, CSS3, JavaScript (Vanilla)
 - Bootstrap 5.3
 - Font Awesome
-- Arquitetura MPA (Multi-Page Application)
+- MPA Architecture (Multi-Page Application)
 
-**Infraestrutura:**
+**Infrastructure:**
 - Maven
 - Docker 
 - Docker Compose
@@ -53,75 +53,75 @@ Sistema centralizado que permite:
 
 ---
 
-## 📊 Modelo de Dados
+## 📊 Data Model
 
-### Entidades Principais
+### Main Entities
 
-#### Usuario
-Colaboradores que realizam deslocamentos.
+#### Usuario (User)
+Employees who travel.
 ```
 - id (PK)
-- nome
+- nome (name)
 - email (UK)
-- senha (BCrypt)
-- telefone
-- ativo
+- senha (password - BCrypt)
+- telefone (phone)
+- ativo (active)
 - role (ADMIN, USUARIO)
-- auditoria (data_cadastro, data_alteracao, criado_por, alterado_por)
+- auditoria (audit: creation_date, modification_date, created_by, modified_by)
 ```
 
-#### Deslocamento
-Registro de viagens corporativas.
+#### Deslocamento (Travel)
+Corporate trip records.
 ```
 - id (PK)
 - usuario_id (FK)
-- origem (cidade, estado, endereco)
-- destino (cidade, estado, endereco)
-- motivo
-- datas (saida, chegada_prevista, chegada_real)
-- meio_transporte (ENUM)
-- custos (estimado, real)
+- origem (origin: city, state, address)
+- destino (destination: city, state, address)
+- motivo (reason)
+- datas (dates: departure, expected_arrival, actual_arrival)
+- meio_transporte (transport_method - ENUM)
+- custos (costs: estimated, actual)
 - status (PLANEJADO, EM_TRANSITO, ATRASADO, CONCLUIDO, CANCELADO)
-- observacoes
-- auditoria
+- observacoes (notes)
+- auditoria (audit)
 ```
 
 #### Checkpoint
-Pontos de controle ao longo do trajeto.
+Control points along the route.
 ```
 - id (PK)
 - deslocamento_id (FK, CASCADE)
-- descricao
-- categoria (PARTIDA, INTERMEDIARIO, CHEGADA)
-- localizacao
-- datas (prevista, realizada)
-- ordem_sugerida
-- icone, cor (para UI)
-- observacoes
-- auditoria
+- descricao (description)
+- categoria (category: PARTIDA, INTERMEDIARIO, CHEGADA)
+- localizacao (location)
+- datas (dates: expected, completed)
+- ordem_sugerida (suggested_order)
+- icone, cor (icon, color - for UI)
+- observacoes (notes)
+- auditoria (audit)
 ```
 
-### Relacionamentos
+### Relationships
 - `Usuario` 1:N `Deslocamento`
 - `Deslocamento` 1:N `Checkpoint` (ON DELETE CASCADE)
 
 ---
 
-## 🔐 Segurança
+## 🔐 Security
 
-### Autenticação
+### Authentication
 - Session-based authentication (JSESSIONID)
 - Passwords: BCrypt
 - CSRF Protection (Cookie + Header)
-- HTTPS obrigatório (requiresSecure)
+- HTTPS required (requiresSecure)
 
-### Autorização por Role
+### Role-Based Authorization
 
-- Usuarios de perfil ADMIN podem criar, editar e consultar deslocamentos. Criar, deletar, alterar checkpoints, ativar e desativar usuarios.
-- Usuários de perfil USUÁRIO podem adicionar checkpoints em seus deslocamentos ativos e alterar seus dados de usuário.
+- ADMIN users can create, edit and view travel. Create, delete, modify checkpoints, activate and deactivate users.
+- USUARIO users can add checkpoints to their active travel and modify their user data.
 
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 deslocafacil/
@@ -145,14 +145,14 @@ deslocafacil/
 │   ├── index.html
 │   └── tela_principal.html
 └── database/
-    └── scripts SQL
+    └── SQL scripts
 ```
 
 ---
 
-## 🔌 API Endpoints
+## 📌 API Endpoints
 
-### Autenticação
+### Authentication
 
 #### Login
 ```http
@@ -176,9 +176,9 @@ Cookie: JSESSIONID=xxx
 GET /api/csrf-token
 ```
 
-### Usuários
+### Users
 
-#### Criar Usuário (ADMIN)
+#### Create User (ADMIN)
 ```http
 POST /api/usuarios
 X-XSRF-TOKEN: xxx
@@ -192,17 +192,17 @@ X-XSRF-TOKEN: xxx
 }
 ```
 
-#### Listar Usuários (Paginado)
+#### List Users (Paginated)
 ```http
 GET /api/usuarios?page=0&size=20
 ```
 
-#### Buscar por Nome e Role
+#### Search by Name and Role
 ```http
 GET /api/usuarios/lista-usuario-por-role?nome=João&role=USUARIO
 ```
 
-#### Alterar Próprios Dados
+#### Update Own Data
 ```http
 PUT /api/usuarios/me/nome
 X-XSRF-TOKEN: xxx
@@ -213,7 +213,7 @@ X-XSRF-TOKEN: xxx
 }
 ```
 
-#### Alterar Senha
+#### Change Password
 ```http
 PUT /api/usuarios/me/senha
 X-XSRF-TOKEN: xxx
@@ -225,7 +225,7 @@ X-XSRF-TOKEN: xxx
 }
 ```
 
-#### Ativar/Inativar Usuário (ADMIN)
+#### Activate/Deactivate User (ADMIN)
 ```http
 PUT /api/ativo
 X-XSRF-TOKEN: xxx
@@ -244,59 +244,59 @@ X-XSRF-TOKEN: xxx
 }
 ```
 
-### Deslocamentos (EM DESENVOLVIMENTO)
+### Travel (IN DEVELOPMENT)
 
 ```
-POST   /api/deslocamentos          # Criar deslocamento
-GET    /api/deslocamentos          # Listar todos
-GET    /api/deslocamentos/{id}     # Buscar por ID
-PUT    /api/deslocamentos/{id}     # Atualizar
-DELETE /api/deslocamentos/{id}     # Cancelar
-GET    /api/deslocamentos/ativos   # Listar em trânsito/atrasados
-```
-
----
-
-### Checkpoints (EM DESENVOLVIMENTO)
-
-```
-POST   /api/checkpoints                    # Criar checkpoint
-GET    /api/checkpoints/deslocamento/{id}  # Listar por deslocamento
-POST   /api/checkpoints/{id}/checkin       # Realizar check-in
-PUT    /api/checkpoints/{id}               # Atualizar
+POST   /api/deslocamentos          # Create travel
+GET    /api/deslocamentos          # List all
+GET    /api/deslocamentos/{id}     # Get by ID
+PUT    /api/deslocamentos/{id}     # Update
+DELETE /api/deslocamentos/{id}     # Cancel
+GET    /api/deslocamentos/ativos   # List in transit/delayed
 ```
 
 ---
 
-## 🎯 Funcionalidades Implementadas
+### Checkpoints (IN DEVELOPMENT)
 
-### ✅ Concluído
-- [x] Autenticação e autorização (Session + CSRF)
-- [x] CRUD de usuários
-- [x] Gestão de roles (ADMIN, USUARIO)
-- [x] Validações customizadas (email, senha)
-- [x] Exception handling global
-- [x] Auditoria automática (JPA Auditing)
-- [x] Frontend base (tela principal, login)
-- [x] CRUD de Deslocamentos
-- [x] Consulta dinâmica de Deslocamentos usando filtros
-- [x] Integração Google Maps
-
-### 🚧 Em Desenvolvimento (Mocks)
-
-- [ ] CRUD de Checkpoints
-- [ ] Dashboard de acompanhamento
-- [ ] Integração Google Maps
-- [ ] Sistema de check-in
-- [ ] Relatórios e análise de custos
+```
+POST   /api/checkpoints                    # Create checkpoint
+GET    /api/checkpoints/deslocamento/{id}  # List by travel
+POST   /api/checkpoints/{id}/checkin       # Check-in
+PUT    /api/checkpoints/{id}               # Update
+```
 
 ---
 
-## 🗺️ Integração Google Maps
+## 🎯 Implemented Features
 
-### Visualização de Rotas
+### ✅ Done
+- [x] Authentication and authorization (Session + CSRF)
+- [x] User CRUD
+- [x] Role management (ADMIN, USUARIO)
+- [x] Custom validations (email, password)
+- [x] Global exception handling
+- [x] Automatic auditing (JPA Auditing)
+- [x] Base frontend (main screen, login)
+- [x] Travel CRUD
+- [x] Dynamic travel queries using filters
+- [x] Google Maps integration
 
-O sistema utiliza a **Google Maps Directions URL** para exibir rotas sem necessidade de API Key:
+### 🚧 In Development (Mocks)
+
+- [ ] Checkpoint CRUD
+- [ ] Tracking dashboard
+- [ ] Google Maps integration
+- [ ] Check-in system
+- [ ] Reports and cost analysis
+
+---
+
+## 🗺️ Google Maps Integration
+
+### Route Visualization
+
+The system uses **Google Maps Directions URL** to display routes without needing an API Key:
 
 ```javascript
 const url = `https://www.google.com/maps/dir/?api=1&origin=${origem}&destination=${destino}`;
@@ -305,183 +305,183 @@ window.open(url, '_blank');
 
 ---
 
-### Estratégia de Checkpoints
+### Checkpoint Strategy
 
-Para deslocamentos com múltiplos checkpoints intermediários, o sistema gera links sequenciais:
+For travel with multiple intermediate checkpoints, the system generates sequential links:
 
 ```
-Checkpoint 1 (PARTIDA) → Checkpoint 2 (INTERMEDIARIO)
-Checkpoint 2 → Checkpoint 3 (INTERMEDIARIO)
-Checkpoint 3 → Checkpoint 4 (CHEGADA)
+Checkpoint 1 (DEPARTURE) → Checkpoint 2 (INTERMEDIATE)
+Checkpoint 2 → Checkpoint 3 (INTERMEDIATE)
+Checkpoint 3 → Checkpoint 4 (ARRIVAL)
 ```
 
-Cada trecho pode ser visualizado individualmente no Google Maps.
+Each segment can be viewed individually on Google Maps.
 
 ---
 
-## 📝 Validações Customizadas
+## 🔍 Custom Validations
 
 ### @EmailValido
 ```java
-@NotBlank(message = "Email é obrigatório")
-@Email(message = "Email deve ser válido")
-@Size(max = 50, message = "Email deve ter até 50 caracteres")
+@NotBlank(message = "Email is required")
+@Email(message = "Email must be valid")
+@Size(max = 50, message = "Email must be up to 50 characters")
 ```
 ---
 
 ### @SenhaValida
 ```java
-@NotBlank(message = "A senha é obrigatória")
-@Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
+@NotBlank(message = "Password is required")
+@Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
 ```
 ---
 
-# 🐳 Construção dos Containers e Arquitetura Docker
+# 🐳 Container Build and Docker Architecture
 
-A aplicação roda 100% containerizada, utilizando **Docker** + **Docker Compose** para orquestração. A arquitetura é composta por três serviços principais:
+The application runs 100% containerized, using **Docker** + **Docker Compose** for orchestration. The architecture has three main services:
 
 ```
 mariadb ← backend (Spring Boot) ← frontend (NGINX + TLS)
 ```
 
-## Backend (Dockerfile multi-stage)
+## Backend (Multi-stage Dockerfile)
 
-O backend usa **multi-stage build** para reduzir tamanho e melhorar segurança:
+The backend uses **multi-stage build** to reduce size and improve security:
 
 ### 🔨 Stage 1 — Build
 
 * Base: `maven:3.9-eclipse-temurin-21`
-* Compila o projeto e gera o fat-JAR via Maven
+* Compiles project and generates fat-JAR via Maven
 
 ### 🚀 Stage 2 — Runtime
 
 * Base: `eclipse-temurin:21-jre-jammy`
-* Copia o JAR final
-* Expõe a porta `8443`
-* Executa via `java -jar`
+* Copies final JAR
+* Exposes port `8443`
+* Runs via `java -jar`
 
 
-Motivação: separar dependências de build e runtime → imagens menores, mais seguras.
+Motivation: separate build and runtime dependencies → smaller, more secure images.
 
 ---
 
-## Frontend (NGINX + TLS real)
+## Frontend (NGINX + Real TLS)
 
-A imagem do frontend:
+The frontend image:
 
-* Usa `nginx:alpine`
-* Serve arquivos HTML/JS/CSS estáticos
-* Recebe automaticamente via user-data:
+* Uses `nginx:alpine`
+* Serves static HTML/JS/CSS files
+* Automatically receives via user-data:
 
   * `cert.pem`
   * `key.pem`
-* Configura NGINX para servir em **HTTPS nativo (porta 443)**
-* Remove config padrão e aplica seu próprio `nginx.conf`
+* Configures NGINX to serve on **native HTTPS (port 443)**
+* Removes default config and applies custom `nginx.conf`
 
 
-### nginx.conf – Reverse Proxy Seguro com TLS
+### nginx.conf — Secure Reverse Proxy with TLS
 
-O frontend faz proxy para o backend desta forma:
+The frontend proxies to the backend like this:
 
-* Frontend em: `https://ec2/`
-* Backend em: `https://deslocafacil-backend:8443/api/...`
+* Frontend at: `https://ec2/`
+* Backend at: `https://deslocafacil-backend:8443/api/...`
 
-Componentes principais:
+Main components:
 
-* Resolução dinâmica via `resolver 127.0.0.11` (Docker internal DNS)
-* `proxy_ssl_verify off` para permitir TLS interno autoassinado
-* Forward correto de headers (`X-Forwarded-*`)
+* Dynamic resolution via `resolver 127.0.0.11` (Docker internal DNS)
+* `proxy_ssl_verify off` to allow internal self-signed TLS
+* Correct header forwarding (`X-Forwarded-*`)
 
 
-Motivação: segurança de ponta a ponta, inclusive dentro da rede Docker.
+Motivation: end-to-end security, including inside the Docker network.
 
 ---
 
-## Docker Compose — Orquestração Completa
+## Docker Compose — Full Orchestration
 
-O `docker-compose.yml` define 3 serviços:
+The `docker-compose.yml` defines 3 services:
 
-### 📌 mariadb
+### 🔌 mariadb
 
-* Armazena dados persistidos
-* Volume dedicado `db_data`
-* Apenas backend tem acesso a ele
+* Stores persisted data
+* Dedicated volume `db_data`
+* Only backend has access to it
 
 
-### 📌 backend
+### 🔌 backend
 
 * Build via Dockerfile
-* Lê variáveis sensíveis do `.env` gerado via SSM
-* Inclui caminhos para chaves/certificados
-* Reinício automático `restart: unless-stopped`
-* Expõe `8443` para o NGINX
+* Reads sensitive variables from `.env` generated via SSM
+* Includes paths to keys/certificates
+* Automatic restart `restart: unless-stopped`
+* Exposes `8443` to NGINX
 
 
-### 📌 frontend
+### 🔌 frontend
 
-* Build do Dockerfile do NGINX
-* Depende do backend
-* Expõe a porta `443` ao mundo
-* Serve o site estático
-* Proxy seguro para o backend
+* Build from NGINX Dockerfile
+* Depends on backend
+* Exposes port `443` to the world
+* Serves static site
+* Secure proxy to backend
 
 
-Motivação: arquitetura limpa, de três camadas, totalmente isolada:
+Motivation: clean, three-tier architecture, fully isolated:
 
 ```
-[Usuário] → HTTPS → [NGINX Frontend] → HTTPS → [Spring Boot] → [MariaDB]
+[User] → HTTPS → [NGINX Frontend] → HTTPS → [Spring Boot] → [MariaDB]
 ```
 
 ---
 
-# 🏭 Infraestrutura (AWS + Terraform)
+# 🏭 Infrastructure (AWS + Terraform)
 
-A infraestrutura é provisionada via **Terraform**, garantindo reprodutibilidade, mínimo esforço operacional e segurança centralizada por IAM + SSM Parameter Store.
-Ela cria automaticamente:
+The infrastructure is provisioned via **Terraform**, ensuring reproducibility, minimal operational effort, and centralized security via IAM + SSM Parameter Store.
+It automatically creates:
 
-### 🔐 Rede e Segurança
+### 🔒 Network and Security
 
-* **Security Group dedicado** permitindo apenas:
+* **Dedicated Security Group** allowing only:
 
   * `22` (SSH)
-  * `8443` (backend Spring Boot com TLS)
-  * `443` (frontend NGINX com TLS)
-    Todas as saídas são liberadas para permitir update, clone, SSM, etc.
+  * `8443` (Spring Boot backend with TLS)
+  * `443` (NGINX frontend with TLS)
+    All outbound traffic is allowed for updates, cloning, SSM, etc.
 
 
-### 🧩 IAM e Acesso Seguro a Secrets
+### 🧩 IAM and Secure Secret Access
 
-* Criação de uma **IAM Role** exclusiva para a EC2.
-* Permite acesso somente ao prefixo de parâmetros seguros no SSM:
+* Creation of an **exclusive IAM Role** for EC2.
+* Allows access only to the secure parameter prefix in SSM:
   `/hackaton-devs2blu/backend/*`
-* Policies para **decrypt via KMS** e leitura de parâmetros sensíveis:
+* Policies for **decrypt via KMS** and reading sensitive parameters:
 
-  * credenciais do Banco
-  * credenciais do Flyway
-  * senhas de keystore
-  * certificados SSL (Key + Cert)
+  * Database credentials
+  * Flyway credentials
+  * Keystore passwords
+  * SSL certificates (Key + Cert)
 
 
-### 🖥️ EC2 Automatizada com User Data
+### 🖥️ Automated EC2 with User Data
 
-A máquina EC2 (Debian 12) é criada com:
+The EC2 instance (Debian 12) is created with:
 
-* Docker Engine + Compose instalados
-* Java 21 e Maven
+* Docker Engine + Compose installed
+* Java 21 and Maven
 * AWS CLI
-* Clone automático do repositório
-* Download seguro dos certificados TLS via SSM
-* Correção, revalidação e normalização do formato PEM
-* Criação do `.env` preenchido dinamicamente
-* Build automático do backend (`mvn clean package`)
-* Execução do `docker compose up -d`
+* Automatic repository clone
+* Secure TLS certificate download via SSM
+* Correction, revalidation and normalization of PEM format
+* Dynamic `.env` file creation
+* Automatic backend build (`mvn clean package`)
+* Execution of `docker compose up -d`
 
 
-### Arquitetura da Infra do Sistema LocalizaFacil (AWS)
+### LocalizaFacil System Infrastructure Architecture (AWS)
 
 ```mermaid
 flowchart TB
-    User["Usuário / Browser"]
+    User["User / Browser"]
     
     subgraph AWS["AWS Cloud"]
         subgraph EC2["EC2 Debian 12"]
@@ -495,26 +495,26 @@ flowchart TB
     end
     
     User -->|HTTPS| FE
-    FE -->|HTTPS interno<br/>/api| BE
+    FE -->|HTTPS internal<br/>/api| BE
     BE -->|JDBC| DB
     SSM -->|Secrets| BE
     SSM -->|TLS cert/key| FE
 ```
 
 
-### ✔ Objetivo da Infra
+### ✓ Infrastructure Goal
 
-Produzir um ambiente totalmente **autogerenciado**, onde subir uma nova EC2 já entrega:
+Produce a fully **self-managed** environment, where launching a new EC2 already delivers:
 
-* Certificados válidos
-* Variáveis sensíveis carregadas
-* Backend compilado
-* Containers rodando
-* Frontend e API expostos em HTTPS
+* Valid certificates
+* Sensitive variables loaded
+* Compiled backend
+* Running containers
+* Frontend and API exposed on HTTPS
 
-## 👥 Equipe
+## 👥 Team
 
-Projeto desenvolvido para o **Hackathon 2025 +Devs2Blu**.
+Project developed for **Hackathon 2025 +Devs2Blu**.
 - Angelo Balotin Mattos
 - Cauê França
 - Daniel Greenwod
@@ -523,13 +523,13 @@ Projeto desenvolvido para o **Hackathon 2025 +Devs2Blu**.
 
 ---
 
-## 📄 Licença
+## 📄 License
 
-Este projeto foi desenvolvido para fins educacionais no contexto do Hackathon Blusoft.
+This project was developed for educational purposes in the context of the Blusoft Hackathon.
 
 ---
 
-## 🔗 Links Úteis
+## 🔗 Useful Links
 
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [Bootstrap 5 Docs](https://getbootstrap.com/docs/5.3/)
@@ -537,4 +537,4 @@ Este projeto foi desenvolvido para fins educacionais no contexto do Hackathon Bl
 
 ---
 
-**Status do Projeto:** 🚧 Em Desenvolvimento (MVP)
+**Project Status:** 🚧 In Development (MVP)
